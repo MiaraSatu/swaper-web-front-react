@@ -4,9 +4,18 @@ import { router } from "../router"
 import Login from "./Login"
 
 const Root = () => {
-  const {isAuthenticated} = useAuth()
+  const {isAuthenticated, user, logout} = useAuth()
+
   if(isAuthenticated) {
-    return <RouterProvider router={router} />
+    return <>
+      <div>
+        {user.name} ({user.email})
+      </div>
+      <button onClick={() => logout()}>
+        logout
+      </button>
+      <RouterProvider router={router} />
+    </>
   }
   return <Login />
 }

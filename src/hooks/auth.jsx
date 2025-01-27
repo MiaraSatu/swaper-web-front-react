@@ -25,7 +25,7 @@ const AuthContextProvider = ({children}) => {
 
   const login = (token, user) => {
     const now = new Date();
-    const expiration = now.getTime() + TTL *1000;
+    const expiration = now.getTime() + (TTL *1000);
     if(token && user) {
       setAuthenticated(true)
       localStorage.setItem('token', JSON.stringify({value: token, expiredAt: expiration}))
@@ -40,20 +40,14 @@ const AuthContextProvider = ({children}) => {
   }
 
   useEffect(() => {
-    const autoCleanInterval = setInterval(() => {
-      if(isTokenExpired()) {
-        logout()
-      }
-    }, 5000)
-
+    const autoCleanInterval = setInterval(() => { if(isTokenExpired()) logout() }, 5000)
     // verify the token validity
     if(isTokenExpired()) {
       logout()
     } else {
       setAuthenticated(true)
     }
-
-    return clearInterval(autoCleanInterval)
+    return () => clearInterval(autoCleanInterval)
   }, [])
 
   const tokenObject = JSON.parse(localStorage.getItem('token'))

@@ -10,11 +10,9 @@ const Login = () => {
   const submitFormHandler = async (e) => {
     e.preventDefault()
     const response = await loginService.apiLogin({username: email, password: password})
-    if(response.error) {
-      // display error
+    if(response) {
+      login(response.token, response.user)
     }
-    // get related user
-    console.log(response)
   }
 
   return <div>

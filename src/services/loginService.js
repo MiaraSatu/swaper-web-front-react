@@ -1,9 +1,8 @@
 import axios from "axios"
 import { API_URL, BASE_URL } from "./api"
 
-const apiLogin = async (credentials) => {
-  let loginData = {}, error = null
-  // get token by credentials
+async function getToken(credentials) {
+  let token = null
   await axios.post(BASE_URL+"/login", {}, {
     'Content-Type': 'application/json',
     auth: {
@@ -12,34 +11,40 @@ const apiLogin = async (credentials) => {
     }
   })
   .then(({data}) => {
-    loginData.token = data
+    token = data
   })
   .catch((error) => {
-    error = error
+    console.error("get token error",error)
   })
-  if(loginData.token) {
-    // get user by token
-    await axios.get(API_URL+"/user", {
-      headers: {
-        Authorization: 'bearer '+loginData.token
-      }
-    }).then(({data}) => {
-      loginData.user = data
-    }).catch((error) => {
-      console.error("Error appears", error)
-    })
-  }
-
-  return {loginData, error}
+  return token
 }
 
-const testConnection = () => {
-  axios.get(BASE_URL+"/before_start/get_users").catch((error) => {console.error("error negga", error)}).then((response) => {console.log(response)})
+async function getUser(token) {
+  let user = null
+  await axios.get(API_URL+"/user", {
+    headers: {
+      'Content-Type': "application/json",
+      Authorization: 'bearer '+token
+    }
+  }).then(({data}) => {
+    user = data
+  }).catch((error) => {
+    console.error("getting user error", error)
+  })
+  return user
+}
+
+const apiLogin = async (credentials) => {
+  let loginData = {}
+  loginData.token = await getToken(credentials)
+  loginData.user = await getUser(loginData.token)
+  if(!loginData.token || !loginData.user) 
+    return null
+  return loginData
 }
 
 const loginService = {
   apiLogin,
-  testConnection
 }
 
 export default loginService
