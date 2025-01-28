@@ -1,10 +1,13 @@
 import { useState } from "react"
 import loginService from "../services/loginService"
 import { useAuth } from "../hooks/auth"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const Login = () => {
   const [email, setEmail] = useState("user@example.com")
   const [password, setPassword] = useState("user")
+  const [errorMessage, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
   const {login} = useAuth()
 
   const submitFormHandler = async (e) => {
@@ -12,6 +15,8 @@ const Login = () => {
     const response = await loginService.apiLogin({username: email, password: password})
     if(response) { 
       login(response.token, response.user)
+    } else {
+      setError("Identity incorrect!")
     }
   }
 
@@ -25,6 +30,16 @@ const Login = () => {
           <div className="text-sm text-gray-300">
             You can communicate with all your friends here! just send her an invitation and you can do what you want with her!
           </div>
+          {
+            (errorMessage) 
+            ? <div className="my-4 text-sm text-red-600">
+              <span className="mr-3">
+                <FontAwesomeIcon icon="fa-solid fa-warning"/>
+              </span>
+              {errorMessage}
+            </div>
+            : <></>
+          }
         </div>
         <form className="bock" onSubmit={submitFormHandler}>
           <div className="w-full px-8 py-3 shadow-inner shadow-gray-900">
