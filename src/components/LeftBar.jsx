@@ -22,7 +22,7 @@ const LeftBar = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink to={{pathname: "/about"}}>
+        <NavLink to={{pathname: "/friends"}}>
           <div className="icon">
             <FontAwesomeIcon icon="fa-solid fa-user-plus" />
           </div>
@@ -30,7 +30,7 @@ const LeftBar = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink to={{pathname: "/"}}>
+        <NavLink to={{pathname: "/groups"}}>
           <div className="icon">
             <FontAwesomeIcon icon="fa-solid fa-users"/>
           </div>
@@ -38,7 +38,7 @@ const LeftBar = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink to={{pathname: "/"}}>
+        <NavLink to={{pathname: "/favorites"}}>
           <div className="icon">
             <FontAwesomeIcon icon="fa-solid fa-heart" />
           </div>

@@ -20,12 +20,24 @@ export const router = createBrowserRouter([
         <Discussions />
       },
       {
-        path: "about",
+        path: "friends",
         element: <div>
           Welcome to the about page
           <div className="text-red-500">
             <Link to={{pathname: "/"}}>Go home</Link>
           </div>
+        </div>
+      },
+      {
+        path: "groups",
+        element: <div>
+          I'm the group element
+        </div>
+      },
+      {
+        path: "favorites",
+        element: <div>
+          Favorite elements neeggggaa!
         </div>
       }
     ]
