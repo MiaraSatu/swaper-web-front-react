@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  #left-bar-options li{
+    @apply py-3 text-gray-500;
+    a {
+      @apply flex;
+      &.active {
+        @apply text-white font-semibold;
+      }
+      .icon {
+        width: 2.5rem;
+        @apply flex items-center justify-center;
+      }
+    }
+  }
+}

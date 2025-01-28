@@ -1,21 +1,13 @@
-import { RouterProvider } from "react-router-dom"
+import { Outlet, RouterProvider } from "react-router-dom"
 import { useAuth } from "../hooks/auth"
 import { router } from "../router"
 import Login from "./Login"
 
 const Root = () => {
-  const {isAuthenticated, user, logout} = useAuth()
+  const {isAuthenticated} = useAuth()
 
   if(isAuthenticated) {
-    return <>
-      <div>
-        {user.name} ({user.email})
-      </div>
-      <button onClick={() => logout()}>
-        logout
-      </button>
-      <RouterProvider router={router} />
-    </>
+    return <RouterProvider router={router} />
   }
   return <Login />
 }

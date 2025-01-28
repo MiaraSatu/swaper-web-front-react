@@ -1,19 +1,23 @@
-import { createBrowserRouter, Link } from "react-router-dom";
+import { createBrowserRouter, Link, Outlet } from "react-router-dom";
+import Discussions from "./components/Discussions";
+import LeftBar from "./components/LeftBar";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: <div className="w-full h-screen flex"> 
+      <div className="w-1/6 h-full">
+        <LeftBar />
+      </div>
+      <div className="w-5/6 h-full">
+        <Outlet />
+      </div>
+    </div>,
     children: [
       {
         path: "",
-        element: <div>
-          Welcome to home page.
-          <div className="text-red-500">
-            <Link to={{pathname: "about"}}>
-              about
-            </Link>
-          </div>
-        </div>
+        element: 
+        <Discussions />
       },
       {
         path: "about",
