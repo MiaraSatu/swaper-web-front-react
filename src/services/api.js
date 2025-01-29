@@ -15,4 +15,8 @@ const apiFetch = async (url, token) => {
   return response
 }
 
-export {BASE_URL, API_URL, apiFetch}
+const apiImageUrl = (url) => {
+  return BASE_URL+url
+}
+
+export {BASE_URL, API_URL, apiFetch, apiImageUrl}

@@ -54,7 +54,17 @@ async function fetchPaginedSuggestions(token) {
   return response
 }
 
+async function inviteFriend(userId, message, token) {
+  await axios.post(API_URL+"/user/"+userId+"/invite", message, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    console.log(data)
+  })
+  .catch((error) => {
+    console.error("Invitation not sent:", error)
+  })
+}
 
-const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions}
+
+const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions, inviteFriend}
 
 export default usersService

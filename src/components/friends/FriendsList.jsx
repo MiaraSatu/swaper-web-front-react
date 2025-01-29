@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useFriends } from "../../hooks/useFriends"
 import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
-import { apiFetch, BASE_URL } from "../../services/api"
+import { apiFetch, apiImageUrl } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
@@ -42,13 +42,10 @@ const FriendsList = () => {
 }
 
 const FriendItem = ({friend}) => {
-  function loadImage(url) {
-    return BASE_URL+url
-  }
 
   return <div className="flex my-3 p-3 rounded shadow-md bg-gray-100">
     <div className="w-16 h-16 rounded-full min-w-16">
-      <img src={friend.imageUrl ? loadImage(friend.imageUrl) : avatar} alt={friend.name} className="w-full h-full object-cover" />
+      <img src={friend.imageUrl ? apiImageUrl(friend.imageUrl) : avatar} alt={friend.name} className="w-full h-full object-cover" />
     </div>
     <div className="w-full ml-2">
       <div className="font-semibold">{friend.name}</div>
