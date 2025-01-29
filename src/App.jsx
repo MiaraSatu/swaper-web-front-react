@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
-import { AuthContextProvider } from './hooks/auth'
+import { AuthContextProvider } from './hooks/useAuth'
 import Root from './components/Root'
 
 function App() {

@@ -1,6 +1,7 @@
 import { createBrowserRouter, Link, Outlet } from "react-router-dom";
 import Discussions from "./components/Discussions";
 import LeftBar from "./components/LeftBar";
+import Friends from "./components/Friends";
 
 export const router = createBrowserRouter([
   {
@@ -21,12 +22,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "friends",
-        element: <div>
-          Welcome to the about page
-          <div className="text-red-500">
-            <Link to={{pathname: "/"}}>Go home</Link>
-          </div>
-        </div>
+        element: <Friends />
       },
       {
         path: "groups",

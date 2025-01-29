@@ -16,4 +16,9 @@
       }
     }
   }
+  #friends-list-filter {
+    li.active {
+      @apply bg-gray-400 rounded-md text-gray-800 shadow-lg;
+    }
+  }
 }

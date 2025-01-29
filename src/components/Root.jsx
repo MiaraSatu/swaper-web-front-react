@@ -1,5 +1,5 @@
 import { Outlet, RouterProvider } from "react-router-dom"
-import { useAuth } from "../hooks/auth"
+import { useAuth } from "../hooks/useAuth"
 import { router } from "../router"
 import Authenticate from "./Authenticate"
 

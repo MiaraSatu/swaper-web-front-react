@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useAuth } from "../hooks/auth"
+import { useAuth } from "../hooks/useAuth"
 import { NavLink } from "react-router-dom"
 import { BASE_URL } from "../services/api"
 import avatar from "../assets/User_Avatar_2.png"

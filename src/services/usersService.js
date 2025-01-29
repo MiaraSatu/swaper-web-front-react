@@ -16,6 +16,45 @@ async function fetchBestFriends(token) {
   return friends
 }
 
-const usersService = {fetchBestFriends}
+async function fetchPaginedFriends(userId, token) {
+  let response = null
+  await axios.get(API_URL+"/users/"+userId+"/friends", {
+    headers: {
+      Authorization: "bearer "+token
+    }
+  }).then(({data}) => {
+    response = data
+  }).catch((error) => {
+    console.error("error by fetching friends", error)
+  })
+  return response
+}
+
+async function fetchPaginedInvitations(filter, token) {
+  let response = null
+  await axios.get(API_URL+"/invitations/"+filter, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when fetching received invitations :", error)
+  })
+  return response
+}
+
+async function fetchPaginedSuggestions(token) {
+  let response = null
+  await axios.get(API_URL+"/users/suggestions", {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when fetching suggestions ", error)
+  })
+  return response
+}
+
+
+const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions}
 
 export default usersService

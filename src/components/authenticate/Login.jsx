@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import loginService from "../../services/loginService"
-import { useAuth } from "../../hooks/auth"
+import { useAuth } from "../../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const Login = ({changeCurrent}) => {

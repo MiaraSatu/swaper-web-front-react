@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useAuth } from "../../hooks/auth"
+import { useAuth } from "../../hooks/useAuth"
 import usersService from "../../services/usersService"
 
 const BestFriends = () => {
