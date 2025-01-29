@@ -43,8 +43,23 @@ const apiLogin = async (credentials) => {
   return loginData
 }
 
+const apiRegister = async (userData) => {
+  let response = {error: null}
+  await axios.post(BASE_URL+"/register", userData, {
+    headers: {
+      "Content-Type": 'application/json'
+    }
+  }).then(({data}) => {
+    console.log(data)
+  }).catch((error) => {
+    response.error = error.response.data
+  })
+  return response
+}
+
 const loginService = {
   apiLogin,
+  apiRegister
 }
 
 export default loginService

@@ -1,13 +1,12 @@
-import { useState } from "react"
-import loginService from "../services/loginService"
-import { useAuth } from "../hooks/auth"
+import { useEffect, useState } from "react"
+import loginService from "../../services/loginService"
+import { useAuth } from "../../hooks/auth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-const Login = () => {
+const Login = ({changeCurrent}) => {
   const [email, setEmail] = useState("user@example.com")
   const [password, setPassword] = useState("user")
   const [errorMessage, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
   const {login} = useAuth()
 
   const submitFormHandler = async (e) => {
@@ -72,7 +71,7 @@ const Login = () => {
       </div>
       <div className="flex justify-between mt-2 text-sm text-gray-200">
         <div>Forgot password</div>
-        <div>Sign up</div>
+        <button onClick={() => changeCurrent()}>Sign up</button>
       </div>
     </div>
   </div>

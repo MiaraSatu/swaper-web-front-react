@@ -1,7 +1,7 @@
 import { Outlet, RouterProvider } from "react-router-dom"
 import { useAuth } from "../hooks/auth"
 import { router } from "../router"
-import Login from "./Login"
+import Authenticate from "./Authenticate"
 
 const Root = () => {
   const {isAuthenticated} = useAuth()
@@ -9,7 +9,7 @@ const Root = () => {
   if(isAuthenticated) {
     return <RouterProvider router={router} />
   }
-  return <Login />
+  return <Authenticate />
 }
 
 export default Root
