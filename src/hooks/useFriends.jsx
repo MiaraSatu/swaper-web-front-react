@@ -9,7 +9,8 @@ const FriendsContext = createContext({
   addFriendsList: () => {},
   setFriendsList: () => {},
   setRequests: () => {},
-  setSuggestionsList: () => {}
+  setSuggestionsList: () => {},
+  newInvitation: () => {}
 })
 
 const friendsReducer = (state, action) => {
@@ -78,6 +79,12 @@ const friendsReducer = (state, action) => {
       suggestionsList: [...state.suggestionsList, ...action.payload]
     }
   }
+  if(action.type == "NEW_INVITATION") {
+    return {
+      ...state,
+      sentRequests: [{...action.payload},...state.sentRequests]
+    }
+  }
 
   return state
 }
@@ -92,7 +99,8 @@ const FriendsContextProvider = ({children}) => {
     addFriendsList: () => {},
     setFriendsList: () => {},
     setRequests: () => {},
-    setSuggestionsList: () => {}
+    setSuggestionsList: () => {},
+    newInvitation: () => {}
   })
 
   function addFriendsList(list) {
@@ -116,6 +124,12 @@ const FriendsContextProvider = ({children}) => {
       dispatch({type: "ADD_SUGGESTIONS_LIST", payload: list})
   }
 
+  function newInvitation(invitation) {
+    if(invitation != null) {
+      dispatch({type: "NEW_INVITATION", payload: invitation})
+    }
+  }
+
   return <FriendsContext.Provider value={{
     friendsList: state.friendsList,
     receivedRequests: state.receivedRequests,
@@ -125,7 +139,8 @@ const FriendsContextProvider = ({children}) => {
     addFriendsList,
     setFriendsList,
     setRequests,
-    setSuggestionsList
+    setSuggestionsList,
+    newInvitation
   }}>
     {children}
   </FriendsContext.Provider>

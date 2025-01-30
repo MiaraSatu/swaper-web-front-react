@@ -55,13 +55,15 @@ async function fetchPaginedSuggestions(token) {
 }
 
 async function inviteFriend(userId, message, token) {
+  let response = null
   await axios.post(API_URL+"/user/"+userId+"/invite", message, {headers: {Authorization: "bearer "+token}})
   .then(({data}) => {
-    console.log(data)
+    response = data
   })
   .catch((error) => {
-    console.error("Invitation not sent:", error)
+    console.error("Error when sending invitation")
   })
+  return response
 }
 
 
