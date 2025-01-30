@@ -4,6 +4,7 @@ import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
 import SuggestionItem from "./SuggestionItem"
 import InvitationModal from "./InvitationModal"
+import InvitationItem from "./InvitationItem"
 
 const Invitations = () => {
   const {token} = useAuth()
@@ -78,16 +79,26 @@ const Invitations = () => {
       </ul>
       <div className="mt-3">
         {("received" == filter)
-          ? receivedRequests.map(req => <div key={req.id}>{req.sender.name}</div>)
+          ? receivedRequests.map(req => <InvitationItem 
+              key={req.id} 
+              invitation={req} 
+              subjectStatus="sender" 
+            />)
           : <></>
         }
         {("sent" == filter)
-          ? sentRequests.map(req => <div key={req.id}>{req.receiver.name}</div>)
+          ? sentRequests.map(req => <InvitationItem 
+              key={req.id}
+              invitation={req}
+            />)
           : <></>
         }
         {
           ("refused" == filter)
-          ? refusedRequests.map(req => <div key={req.id}>{req.receiver.name}</div>)
+          ? refusedRequests.map(req => <InvitationItem 
+              key={req.id}
+              invitation={req}
+            />)
           : <></>
         }
       </div>
