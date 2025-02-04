@@ -77,7 +77,7 @@ const Invitations = () => {
           Refused
         </li>
       </ul>
-      <div className="mt-3">
+      <div className="flex flex-wrap mt-3">
         {("received" == filter)
           ? receivedRequests.map(req => <InvitationItem 
               key={req.id} 
