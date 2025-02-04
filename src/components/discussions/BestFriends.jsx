@@ -9,7 +9,7 @@ const BestFriends = () => {
   useEffect(() => {
     const loadBestFriends = async () => {
       const bf = await usersService.fetchBestFriends(token)
-      setBestFriends(bf)
+      if(bf) setBestFriends(bf)
     }
     loadBestFriends()
   }, [])
