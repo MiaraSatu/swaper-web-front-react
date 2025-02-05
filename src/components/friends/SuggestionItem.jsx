@@ -16,12 +16,33 @@ const SuggestionItem = ({user, sendInvitation}) => {
         <div className="text-sm text-gray-500">
           {user.email}
         </div>
-        <button 
-          onClick={() => sendInvitation(user)}
-          className="w-full px-3 py-1 mt-2 bg-gray-50 rounded-md text-gray-900 border-2 border-gray-900"
-        >
-          Invite as friends
-        </button>
+        { user.friendStatus == "none"
+          ? <button 
+              onClick={() => sendInvitation(user)}
+              className="w-full px-3 py-1 mt-2 bg-gray-50 rounded-md text-gray-900 border-2 border-gray-900"
+            >
+              Invite as friends
+            </button>
+          : <></>
+        }
+        { user.friendStatus == "sent"
+          ? <button 
+              onClick={() => sendInvitation(user)}
+              className="w-full px-3 py-1 mt-2 bg-gray-50 rounded-md text-red-700 border-2 border-red-700"
+            >
+              Cancel
+            </button>
+          :<></>
+        }
+        { user.friendStatus == "friend"
+          ? <button 
+              onClick={() => sendInvitation(user)}
+              className="w-full px-3 py-1 mt-2 bg-gray-50 rounded-md text-yellow-700 border-2 border-yellow-700"
+            >
+              Remove
+            </button>
+          : <></>
+        }
       </div>
     </div>
   </>

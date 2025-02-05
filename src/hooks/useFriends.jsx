@@ -73,7 +73,7 @@ const friendsReducer = (state, action) => {
       ...state,
       suggestionsList: [...state.suggestionsList.map(sug => {
         if(sug.id == action.payload.receiver.id) {
-          return {...action.payload}
+          return {...action.payload.receiver}
         }
         return sug
       })]

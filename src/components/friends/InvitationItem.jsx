@@ -5,39 +5,35 @@ import { useAuth } from "../../hooks/useAuth"
 import { useFriends } from "../../hooks/useFriends"
 import usersService from "../../services/usersService"
 
-function getInvitationType(invitation, observer) {
-  if(invitation.sender.id == observer.id) {
-    if(invitation.accepted == false && invitation.refused == false)
-      return "sent"
-    if(invitation.refused == true)
-      return "refused"
-    if(invitation.accepted == true)
-      return "accepted"
-  } else if(invitation.receiver.id == observer.id) {
-    if(invitation.accepted == false && invitation.refused == false)
-      return "received"
-  }
-  return null
-}
 
-const InvitationItem = ({invitation, onRefuse = () => {}, subjectStatus = "receiver"}) => {
-  const {user, token} = useAuth()
-  const {acceptRequest, cancelRequest} = useFriends()
+const InvitationItem = ({invitation, onRefuse = () => {}, openModal = () => {},subjectStatus = "receiver"}) => {
+  const {token} = useAuth()
+  const {acceptRequest, cancelRequest, refuseRequest} = useFriends()
   const subject = (subjectStatus == "receiver") ? invitation.receiver : invitation.sender
-  const type = getInvitationType(invitation, user) // received, sent, refused
 
   const acceptHandler = async () => {
     const accepted = await usersService.acceptInvitation(invitation.id, token)
     if(accepted) {
-      acceptRequest(invitation)
+      acceptRequest(accepted)
     }
   }
 
   const cancelHandler = async () => {
     const canceled = await usersService.cancelInvitation(invitation.id, token)
     if(canceled) {
-      cancelRequest(invitation)
+      cancelRequest(canceled)
     }
+  }
+
+  const refuseHandler = async () => {
+    const user = await usersService.refuseInvitation(invitation.id, token)
+    if(user) {
+      refuseRequest(user)
+    }
+  }
+
+  const inviteHandler = async (user) => {
+    // const invitation = await usersService.inviteFriend(user.id, )
   }
   
   return <div className="w-96 p-4 mx-2 border border-gray-200 rounded-md shadow sm">
@@ -111,7 +107,10 @@ const InvitationItem = ({invitation, onRefuse = () => {}, subjectStatus = "recei
       ? <div className="">
           <button 
             className=""
-            onClick={() => {}}
+            onClick={() => {
+              console.log("request sent from InvitationItem", subject)
+              openModal(subject)
+            }}
           >
             <FontAwesomeIcon icon="fa-solid fa-plus" className="mr-2" />
             Send request

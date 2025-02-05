@@ -16,6 +16,17 @@ const Invitations = () => {
   const {token} = useAuth()
   const {setRequests, setSuggestionsList} = useFriends()
 
+  const [currentReceiver, setCurrentReceiver] = useState(null)
+
+  const openModal = (receiver) => {
+    console.log("open modal", receiver)
+    setCurrentReceiver(receiver)
+  }
+
+  const closeModal = () => {
+    setCurrentReceiver(null)
+  }
+
   useEffect(() => {
     const fetchRequests = async () => {
       const receivedResponse = await usersService.fetchPaginedInvitations("received", token)
@@ -32,8 +43,13 @@ const Invitations = () => {
   }, [])
 
   return <div className="w-full">
+    {
+      (currentReceiver)
+      ? <InvitationModal receiver={currentReceiver} onClose={closeModal} />
+      : <></>
+    }
     <div className="w-full">
-      <Suggestions />
+      <Suggestions openModal={openModal} />
     </div>
     <div className="text-xl font-bold">Friends Request</div>
       <ul className="flex cursor-pointer mt-3" id="friends-list-filter">
@@ -51,7 +67,7 @@ const Invitations = () => {
         </NavLink>
       </ul>
       <div className="flex flex-wrap mt-3">
-        <Outlet />
+        <Outlet context={{openModal}} />
       </div>
   </div>
 }
