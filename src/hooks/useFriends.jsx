@@ -10,7 +10,10 @@ const FriendsContext = createContext({
   setFriendsList: () => {},
   setRequests: () => {},
   setSuggestionsList: () => {},
-  newInvitation: () => {}
+  newInvitation: () => {},
+  acceptRequest: () => {},
+  refuseRequest: () => {},
+  cancelRequest: () => {}
 })
 
 const friendsReducer = (state, action) => {
@@ -82,7 +85,68 @@ const friendsReducer = (state, action) => {
   if(action.type == "NEW_INVITATION") {
     return {
       ...state,
-      sentRequests: [{...action.payload},...state.sentRequests]
+      suggestionsList: [...state.suggestionsList.map(sug => {
+        if(sug.id == action.payload.receiver.id) {
+          return {
+            ...sug,
+            friendStatus: "sent"
+          }
+        }
+        return sug
+      })]
+    }
+  }
+  if(action.type == "ACCEPT_REQUEST") {
+    return {
+      ...state,
+      receivedRequests: [
+        ...state.receivedRequests.map((req) => {
+          if(req.id == action.payload.id) {
+            return {
+              ...req,
+              sender: {...req.sender, friendStatus: "friend"}
+            }
+          }
+          return req
+        })
+      ],
+      friendsList: [...state.friendsList, {...action.payload.sender}]
+    }
+  }
+  if(action.type == "REFUSE_REQUEST") {
+    return {
+      ...state,
+      receivedRequests: [
+        ...state.receivedRequests.map(req => {
+          if(redirect.id == action.payload.id) {
+            return {
+              ...req,
+              sender: {...req.sender, friendStatus: "none"}
+            }
+          }
+          return req
+        }) 
+      ],
+      receivedRequests: [...state.receivedRequests.filter((request) => request.id != action.payload.id)],
+      suggestionsList: [...state.suggestionsList, {...action.payload.sender}]
+    }
+  }
+  if(action.type == "CANCEL_REQUEST") {
+    return {
+      ...state,
+      sentRequests: [
+        ...state.sentRequests.map(req => {
+          if(req.id != action.payload.id)
+            return req
+          return {
+            ...req,
+            receiver: {
+              ...req.receiver,
+              friendStatus: "none"
+            }
+          }
+        })
+      ]
     }
   }
 
@@ -100,7 +164,10 @@ const FriendsContextProvider = ({children}) => {
     setFriendsList: () => {},
     setRequests: () => {},
     setSuggestionsList: () => {},
-    newInvitation: () => {}
+    newInvitation: () => {},
+    acceptRequest: () => {},
+    refuseRequest: () => {},
+    cancelRequest: () => {}
   })
 
   function addFriendsList(list) {
@@ -130,6 +197,18 @@ const FriendsContextProvider = ({children}) => {
     }
   }
 
+  function acceptRequest(request) {
+    if(request) dispatch({type: "ACCEPT_REQUEST", payload: request})
+  }
+
+  function refuseRequest(request) {
+    if(request) dispatch({type: "REFUSE_REQUEST", payload: request})
+  }
+
+  function cancelRequest(request) {
+    if(request) dispatch({type: "CANCEL_REQUEST", payload: request})
+  }
+
   return <FriendsContext.Provider value={{
     friendsList: state.friendsList,
     receivedRequests: state.receivedRequests,
@@ -140,7 +219,10 @@ const FriendsContextProvider = ({children}) => {
     setFriendsList,
     setRequests,
     setSuggestionsList,
-    newInvitation
+    newInvitation,
+    acceptRequest,
+    refuseRequest,
+    cancelRequest
   }}>
     {children}
   </FriendsContext.Provider>

@@ -66,7 +66,44 @@ async function inviteFriend(userId, message, token) {
   return response
 }
 
+async function acceptInvitation(invitationId, token) {
+  let response = null
+  await axios.get(API_URL+"/invitation/"+invitationId+"/accept", {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Invitation not accepted", error)
+  })
+  return response
+}
 
-const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions, inviteFriend}
+async function refuseInvitation(invitationId, message, token) {
+  let response = null
+  await axios.post(API_URL+"/invitation/"+invitationId+"/refuse", message, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Invitation not refused", error)
+  })
+  return response
+}
+
+async function cancelInvitation(invitationId, token) {
+  let response = null
+  await axios.get(API_URL+"/invitation/"+invitationId+"/cancel", {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Invitation not canceled", error)
+  })
+  return response
+}
+
+const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions, inviteFriend,
+  acceptInvitation, refuseInvitation, cancelInvitation
+}
 
 export default usersService

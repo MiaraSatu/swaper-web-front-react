@@ -2,6 +2,8 @@ import { apiImageUrl } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "../../hooks/useAuth"
+import { useFriends } from "../../hooks/useFriends"
+import usersService from "../../services/usersService"
 
 function getInvitationType(invitation, observer) {
   if(invitation.sender.id == observer.id) {
@@ -18,10 +20,25 @@ function getInvitationType(invitation, observer) {
   return null
 }
 
-const InvitationItem = ({invitation, subjectStatus = "receiver"}) => {
-  const {user} = useAuth()
+const InvitationItem = ({invitation, onRefuse = () => {}, subjectStatus = "receiver"}) => {
+  const {user, token} = useAuth()
+  const {acceptRequest, cancelRequest} = useFriends()
   const subject = (subjectStatus == "receiver") ? invitation.receiver : invitation.sender
   const type = getInvitationType(invitation, user) // received, sent, refused
+
+  const acceptHandler = async () => {
+    const accepted = await usersService.acceptInvitation(invitation.id, token)
+    if(accepted) {
+      acceptRequest(invitation)
+    }
+  }
+
+  const cancelHandler = async () => {
+    const canceled = await usersService.cancelInvitation(invitation.id, token)
+    if(canceled) {
+      cancelRequest(invitation)
+    }
+  }
   
   return <div className="w-96 p-4 mx-2 border border-gray-200 rounded-md shadow sm">
     <div className="flex">
@@ -42,13 +59,20 @@ const InvitationItem = ({invitation, subjectStatus = "receiver"}) => {
       "{invitation.invitationText}"
     </div>
     {
-      type == "received"
+      // you friend sent received none
+      subject.friendStatus == "received"
       ? <div className="flex justify-between mt-2">
-          <button className="w-1/2 mr-2 py-1 rounded text-green-600 border-2 border-green-600">
+          <button 
+            className="w-1/2 mr-2 py-1 rounded text-green-600 border-2 border-green-600"
+            onClick={acceptHandler}
+          >
             <FontAwesomeIcon icon="fa-solid fa-check" className="mr-2" />
             Accept
           </button>
-          <button className="w-1/2 ml-2 py-1 rounded text-red-600 border-2 border-red-600 ">
+          <button
+            className="w-1/2 ml-2 py-1 rounded text-red-600 border-2 border-red-600 "
+            onClick={() => onRefuse(invitation)}
+          >
             <FontAwesomeIcon icon="fa-solid fa-x" className="mr-2" />
             Refuse
           </button>
@@ -56,11 +80,41 @@ const InvitationItem = ({invitation, subjectStatus = "receiver"}) => {
       : <></>
     }
     {
-      type == "sent"
+      subject.friendStatus == "sent"
       ? <div className="flex justify-between mt-2">
-          <button className="w-full ml-2 py-1 rounded text-red-600 border-2 border-red-600 ">
+          <button 
+            className="w-full ml-2 py-1 rounded text-red-600 border-2 border-red-600"
+            onClick={cancelHandler}
+          >
             <FontAwesomeIcon icon="fa-solid fa-x" className="mr-2" />
             Cancel
+          </button>
+        </div>
+      : <></>
+    }
+    {
+      subject.friendStatus == "friend"
+      ? <div className="">
+          <button className="">
+            <FontAwesomeIcon icon="fa-solid fa-envelope" className="mr-2" />
+            Message
+          </button>
+          <button className="">
+            <FontAwesomeIcon icon="fa-solid fa-x" />
+            Remove
+          </button>
+        </div>
+      :<></>
+    }
+    {
+      subject.friendStatus == "none"
+      ? <div className="">
+          <button 
+            className=""
+            onClick={() => {}}
+          >
+            <FontAwesomeIcon icon="fa-solid fa-plus" className="mr-2" />
+            Send request
           </button>
         </div>
       : <></>
