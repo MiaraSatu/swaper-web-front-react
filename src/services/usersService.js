@@ -37,7 +37,7 @@ async function fetchPaginedInvitations(filter, token) {
     response = data
   })
   .catch((error) => {
-    console.error("Error when fetching received invitations :", error)
+    console.error("Error when fetching "+filter+" invitations :", error)
   })
   return response
 }
@@ -78,9 +78,9 @@ async function acceptInvitation(invitationId, token) {
   return response
 }
 
-async function refuseInvitation(invitationId, message, token) {
+async function refuseInvitation(invitationId, token) {
   let response = null
-  await axios.post(API_URL+"/invitation/"+invitationId+"/refuse", message, {headers: {Authorization: "bearer "+token}})
+  await axios.get(API_URL+"/invitation/"+invitationId+"/refuse", {headers: {Authorization: "bearer "+token}})
   .then(({data}) => {
     response = data
   })

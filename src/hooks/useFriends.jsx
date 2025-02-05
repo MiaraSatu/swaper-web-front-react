@@ -4,7 +4,6 @@ const FriendsContext = createContext({
   friendsList: [],
   receivedRequests: [],
   sentRequests: [],
-  refusedRequests: [],
   suggestionsList: [],
   addFriendsList: () => {},
   setFriendsList: () => {},
@@ -57,19 +56,6 @@ const friendsReducer = (state, action) => {
       sentRequests: [...state.sentRequests, ...action.payload]
     }
   }
-  // REFUSED REQUESTS
-  if(action.type == "SET_REFUSED_REQUESTS") {
-    return {
-      ...state,
-      refusedRequests: [...action.payload]
-    }
-  }
-  if(action.type == "ADD_REFUSED_REQUESTS") {
-    return {
-      ...state,
-      refusedRequests: [...state.refusedRequests, ...action.payload]
-    }
-  }
   if(action.type == "SET_SUGGESTIONS_LIST") {
     return {
       ...state,
@@ -87,10 +73,7 @@ const friendsReducer = (state, action) => {
       ...state,
       suggestionsList: [...state.suggestionsList.map(sug => {
         if(sug.id == action.payload.receiver.id) {
-          return {
-            ...sug,
-            friendStatus: "sent"
-          }
+          return {...action.payload}
         }
         return sug
       })]
@@ -102,10 +85,7 @@ const friendsReducer = (state, action) => {
       receivedRequests: [
         ...state.receivedRequests.map((req) => {
           if(req.id == action.payload.id) {
-            return {
-              ...req,
-              sender: {...req.sender, friendStatus: "friend"}
-            }
+            return {...action.payload}
           }
           return req
         })
@@ -118,10 +98,10 @@ const friendsReducer = (state, action) => {
       ...state,
       receivedRequests: [
         ...state.receivedRequests.map(req => {
-          if(redirect.id == action.payload.id) {
+          if(req.sender.id == action.payload.id) {
             return {
               ...req,
-              sender: {...req.sender, friendStatus: "none"}
+              sender: {...action.payload}
             }
           }
           return req
@@ -136,15 +116,12 @@ const friendsReducer = (state, action) => {
       ...state,
       sentRequests: [
         ...state.sentRequests.map(req => {
-          if(req.id != action.payload.id)
-            return req
-          return {
-            ...req,
-            receiver: {
-              ...req.receiver,
-              friendStatus: "none"
+          if(req.receiver.id == action.payload.id)
+            return {
+              ...req,
+              receiver: {...action.payload}
             }
-          }
+          return req
         })
       ]
     }
@@ -158,7 +135,6 @@ const FriendsContextProvider = ({children}) => {
     friendsList: [],
     receivedRequests: [],
     sentRequests: [],
-    refusedRequests: [],
     suggestionsList: [],
     addFriendsList: () => {},
     setFriendsList: () => {},
@@ -213,7 +189,6 @@ const FriendsContextProvider = ({children}) => {
     friendsList: state.friendsList,
     receivedRequests: state.receivedRequests,
     sentRequests: state.sentRequests,
-    refusedRequests: state.refusedRequests,
     suggestionsList: state.suggestionsList,
     addFriendsList,
     setFriendsList,

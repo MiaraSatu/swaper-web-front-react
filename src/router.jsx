@@ -1,7 +1,9 @@
-import { createBrowserRouter, Link, Outlet } from "react-router-dom";
+import { createBrowserRouter, Link, Navigate, Outlet } from "react-router-dom";
 import Discussions from "./components/Discussions";
 import LeftBar from "./components/LeftBar";
 import Friends from "./components/Friends";
+import Received from "./components/friends/Received";
+import Sent from "./components/friends/Sent";
 
 export const router = createBrowserRouter([
   {
@@ -21,8 +23,19 @@ export const router = createBrowserRouter([
         <Discussions />
       },
       {
-        path: "friends",
-        element: <Friends />
+        path: "friends/",
+        element: <Friends />,
+        children: [
+          {index: true, element: <Navigate to="received/" replace />},
+          {
+            path: "received/",
+            element: <Received />
+          },
+          {
+            path: "sent/",
+            element: <Sent />
+          }
+        ]
       },
       {
         path: "groups",

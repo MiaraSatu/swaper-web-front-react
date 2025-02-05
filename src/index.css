@@ -17,7 +17,7 @@
     }
   }
   #friends-list-filter {
-    li.active {
+    a.active {
       @apply bg-gray-400 rounded-md text-gray-800 shadow-lg;
     }
   }
