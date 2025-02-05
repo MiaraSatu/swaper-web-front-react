@@ -5,10 +5,10 @@ import App from './App.jsx'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
-import { faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart, faPencilSquare, faClose, faCheck, faX, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart, faPencilSquare, faClose, faCheck, faX, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faTwitter, faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart,
-  faPencilSquare, faClose, faCheck, faX, faPlus
+  faPencilSquare, faClose, faCheck, faX, faPlus, faSearch
 )
 
 createRoot(document.getElementById('root')).render(
