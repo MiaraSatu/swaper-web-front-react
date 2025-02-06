@@ -26,4 +26,16 @@
       @apply bg-gray-200;
     }
   }
+  .message {
+    @apply p-4 rounded-2xl;
+    &.long {
+      @apply w-3/4;
+    }
+    &.mine {
+      @apply ml-auto bg-white;
+    }
+    &.not-mine {
+      @apply mr-auto bg-gray-500;
+    }
+  }
 }
