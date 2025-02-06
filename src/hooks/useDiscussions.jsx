@@ -12,6 +12,21 @@ const initialState = {
 
 const DiscussionContext = createContext(initialState)
 
+function updateChatListGroup(chatList) {
+  if(!chatList || chatList.length == 0)
+    return null
+  let owner = chatList[0].sender
+  chatList[0] = {...chatList[0], start: true}
+  for(let i = 0, l = chatList.length; i < l-1; i++) {
+    if(chatList[i+1].sender.id != owner.id) {
+      chatList[i] = {...chatList[i], end: true}
+      chatList[i+1] = {...chatList[i+1], start: true}
+      owner = chatList[i+1].sender
+    }
+  }
+  return chatList
+}
+
 function discussionReducer(state, action) {
   if(action.type == "SET_CURRENT_DISCUSSION") {
     return {
@@ -26,9 +41,10 @@ function discussionReducer(state, action) {
     }
   }
   if(action.type == "SET_CHAT_LIST") {
+    const chats = updateChatListGroup(action.payload)
     return {
       ...state,
-      chatList: [...action.payload]
+      chatList: [...chats]
     }
   }
   if(action.type == "NEW_MESSAGE") {

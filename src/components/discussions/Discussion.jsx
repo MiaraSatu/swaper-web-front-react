@@ -84,20 +84,26 @@ const MessageItem = ({message}) => {
   const isLong = (message.content.length > 70)
   const sentAt = Date.parse(message.createdAt)
 
-  return <div className="w-full flex my-2">
-    {!isMine 
-      ? <img 
-          src={message.sender.imageUrl ? apiImageUrl(message.sender.imageUrl) : avatar} 
-          alt={message.sender.name} 
-          className="w-12 h-12 mr-2"
-        /> 
+  return <div className="w-full my-2">
+    {!isMine && message.start
+      ? <div className="ml-8 font-bold">{message.sender.name}</div>
       : <></>
     }
-    <div className={"message"+(isMine ? " mine" : " not-mine")+ (isLong ? " long": "")}>
-      <div>{message.content}</div>
-      <div className="text-xs text-end">
-        {format(sentAt, "HH:mm")}
-        <FontAwesomeIcon icon="fa-solid fa-check-double" className="ml-3" />
+    <div className="w-full flex">
+      {!isMine && message.start
+        ? <img 
+            src={message.sender.imageUrl ? apiImageUrl(message.sender.imageUrl) : avatar} 
+            alt={message.sender.name} 
+            className="w-6 h-6 object-cover mr-2"
+          /> 
+        : <div className="w-6 mr-2"></div>
+      }
+      <div className={"message"+(isMine ? " mine" : " not-mine")+ (isLong ? " long": "")}>
+        <div>{message.content}</div>
+        <div className="text-xs text-end">
+          {format(sentAt, "HH:mm")}
+          <FontAwesomeIcon icon="fa-solid fa-check-double" className="ml-3" />
+        </div>
       </div>
     </div>
   </div>
