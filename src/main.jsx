@@ -8,10 +8,11 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart, faPencilSquare, faClose, faCheck, faX, faPlus, 
   faSearch,
   faPaperPlane,
-  faCheckDouble} from '@fortawesome/free-solid-svg-icons'
+  faCheckDouble,
+  faArrowTurnUp} from '@fortawesome/free-solid-svg-icons'
 
 library.add(faTwitter, faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart,
-  faPencilSquare, faClose, faCheck, faX, faPlus, faSearch, faPaperPlane, faCheckDouble
+  faPencilSquare, faClose, faCheck, faX, faPlus, faSearch, faPaperPlane, faCheckDouble, faArrowTurnUp
 )
 
 createRoot(document.getElementById('root')).render(

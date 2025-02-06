@@ -25,9 +25,9 @@ async function fetchMessages(exchangerId, token, type = "sample") {
   return response
 }
 
-async function sendMessage(message, type, receivedId, token) {
+async function sendMessage(message, type, receivedId, token, replyTo = null) {
   let response = null
-  await axios.post(API_URL+"/message/"+receivedId+"/"+(type == "sample" ? "0" : "1"), message, {headers: {Authorization: "bearer "+token}})
+  await axios.post(API_URL+"/message/"+receivedId+"/"+(type == "sample" ? "0" : "1")+(replyTo ? "?replyTo="+replyTo : ""), message, {headers: {Authorization: "bearer "+token}})
   .then(({data}) => {
     response = data
   })

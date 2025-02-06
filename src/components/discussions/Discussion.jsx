@@ -8,9 +8,10 @@ import { useAuth } from "../../hooks/useAuth"
 import { format } from "date-fns"
 
 const Discussion = () => {
-  const {token} = useAuth()
+  const {token, user} = useAuth()
   const {chatList, currentDiscussion, setChatList, newMessage} = useDiscussions()
   const [message, setMessage] = useState("")
+  const [parent, setParent] = useState(null) // parent of the new message in the form (reply to)
 
   const changeMessageHandler = (e) => {
     setMessage(e.target.value)
@@ -19,12 +20,17 @@ const Discussion = () => {
   const submitMessageHandler = async (e) => {
     e.preventDefault()
     if(currentDiscussion) {
-      const messageResponse = await messagesService.sendMessage({content: message}, "sample", currentDiscussion.id, token)
+      const messageResponse = await messagesService.sendMessage({content: message}, "sample", currentDiscussion.id, token, parent ? parent.id : null)
       if(messageResponse) {
         newMessage(messageResponse)
         setMessage("")
+        setParent(null)
       }
     }
+  }
+
+  const replyToHandler = (newParent) => {
+    setParent(newParent)
   }
 
   async function fetchMessages() {
@@ -53,11 +59,28 @@ const Discussion = () => {
       }
     </div>
     <div className="px-8 py-4 grow bg-gray-200 overflow-scroll">
-      {chatList.map(message => <MessageItem key={message.id} message={message} />)}
+      {chatList.map(message => <MessageItem key={message.id} message={message} replyToHandler={replyToHandler} />)}
     </div>
-    <div className="w-full px-8 py-4 bg-gray-200">
+    <div className="relative w-full px-8 py-4 bg-gray-200">
+      {parent   
+      ? <div className="absolute bottom-full w-1/2 p-4 shadow-lg bg-white border border-gray-300 rounded opacity-55">
+          <div className="flex items-center font-bold">
+            <FontAwesomeIcon icon="fa-solid fa-arrow-turn-up" className="text-sm mr-2" />
+            Reply to {parent.sender.id == user.id ? "you" : parent.sender.name}
+            <button 
+              className="w-5 h-5 flex items-center justify-center ml-auto rounded-full text-xs hover:bg-gray-300"
+              onClick={() => setParent(null)}
+            >
+              <FontAwesomeIcon icon="fa-solid fa-x" />  
+            </button>
+          </div>
+          <div className="w-full overflow-hidden text-ellipsis text-nowrap">{parent.content}</div>  
+        </div>
+      : <></>
+      }
       <form
         onSubmit={submitMessageHandler}
+        className=""
       >
         <div className="flex items-start bg-white px-4 py-2 rounded-lg shadow-md">
           <textarea 
@@ -78,7 +101,7 @@ const Discussion = () => {
   </div>
 }
 
-const MessageItem = ({message}) => {
+const MessageItem = ({message, replyToHandler}) => {
   const {user} = useAuth()
   const isMine = (message.sender.id == user.id)
   const isLong = (message.content.length > 70)
@@ -98,6 +121,15 @@ const MessageItem = ({message}) => {
           /> 
         : <div className="w-6 mr-2"></div>
       }
+      {isMine 
+        ? <div 
+            className="w-8 h-8 my-auto ml-auto mr-2 p-3 flex justify-center items-center rounded-full text-gray-300 hover:text-gray-900 hover:bg-gray-300 hover:shadow"
+            onClick={() => replyToHandler(message)}
+          >
+            <FontAwesomeIcon icon="fa-solid fa-arrow-turn-up" />
+          </div>
+        : <></>
+      }
       <div className={"message"+(isMine ? " mine" : " not-mine")+ (isLong ? " long": "")}>
         <div>{message.content}</div>
         <div className="text-xs text-end">
@@ -105,6 +137,15 @@ const MessageItem = ({message}) => {
           <FontAwesomeIcon icon="fa-solid fa-check-double" className="ml-3" />
         </div>
       </div>
+      { !isMine
+        ? <div 
+            className="w-8 h-8 my-auto mx-2 p-3 flex justify-center items-center rounded-full text-gray-300 hover:text-gray-900 hover:bg-gray-300 hover:shadow"
+            onClick={() => replyToHandler(message)}
+          >
+            <FontAwesomeIcon icon="fa-solid fa-arrow-turn-up" />
+          </div>
+        : <></>
+      }
     </div>
   </div>
 }

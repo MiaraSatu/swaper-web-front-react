@@ -32,10 +32,10 @@
       @apply w-3/4;
     }
     &.mine {
-      @apply ml-auto bg-white;
+      @apply bg-white;
     }
     &.not-mine {
-      @apply mr-auto bg-gray-500 text-white;
+      @apply bg-gray-500 text-white;
     }
   }
 }
