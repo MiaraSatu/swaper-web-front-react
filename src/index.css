@@ -21,4 +21,9 @@
       @apply bg-gray-400 rounded-md text-gray-800 shadow-lg;
     }
   }
+  .discussion-item{
+    &.seen {
+      @apply bg-gray-200;
+    }
+  }
 }
