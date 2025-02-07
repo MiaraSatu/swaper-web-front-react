@@ -7,6 +7,7 @@ const initialState = {
   setCurrentDiscussion: () => {},
   setDiscussionsList: () => {},
   setChatList: () => {},
+  addChatList: () => {},
   newMessage: () => {}
 }
 
@@ -15,6 +16,7 @@ const DiscussionContext = createContext(initialState)
 function updateChatListGroup(chatList) {
   if(!chatList || chatList.length == 0)
     return null
+  chatList = [...chatList.map(chat => ({...chat, start: false, end: false}))]
   let owner = chatList[0].sender
   const length = chatList.length
   chatList[0] = {...chatList[0], start: true}
@@ -25,8 +27,20 @@ function updateChatListGroup(chatList) {
       owner = chatList[i+1].sender
     }
   }
-  chatList[length-1] = {...chatList[length-1], last: true}
   return chatList
+}
+
+function initializeChatListQueu(chatList) {
+  if(!chatList || chatList.length == 0) return null
+  const length = chatList.length
+  chatList[length - 1] = {...chatList[length - 1], last: true}
+  return chatList
+}
+
+function updateChatListQueu(oldChatList, newChatList) {
+  const oLength = oldChatList.length
+  oldChatList[oLength - 1] = {...oldChatList[oLength - 1], last: false}
+  return [...newChatList, ...oldChatList]
 }
 
 function discussionReducer(state, action) {
@@ -43,17 +57,24 @@ function discussionReducer(state, action) {
     }
   }
   if(action.type == "SET_CHAT_LIST") {
-    const chats = updateChatListGroup(action.payload)
+    const chats = updateChatListGroup(initializeChatListQueu(action.payload))
     return {
       ...state,
       chatList: [...chats]
     }
   }
-  if(action.type == "NEW_MESSAGE") {
-    const chats = updateChatListGroup([...state.chatList, {...action.payload}])
+  if(action.type == "ADD_CHAT_LIST") {
+    const chats = updateChatListGroup(updateChatListQueu(state.chatList, action.payload))
     return {
       ...state,
-      chatList: chats,
+      chatList: chats
+    }
+  }
+  if(action.type == "NEW_MESSAGE") {
+    const chats = updateChatListGroup(updateChatListQueu(state.chatList, action.payload))
+    return {
+      ...state,
+      chatList: [...chats],
       discussionsList: [
         {...action.payload},
         ...state.discussionsList.filter(discussion => {
@@ -82,6 +103,10 @@ const DiscussionContextProvider = ({children}) => {
     if(chats) dispatch({type: "SET_CHAT_LIST", payload: chats})
   }
 
+  const addChatList = (chats) => {
+    if(chats) dispatch({type: "ADD_CHAT_LIST", payload: chats})
+  }
+
   const newMessage = (message) => {
     if(message) dispatch({type: "NEW_MESSAGE", payload: message})
   }
@@ -93,6 +118,7 @@ const DiscussionContextProvider = ({children}) => {
     setCurrentDiscussion,
     setDiscussionsList,
     setChatList,
+    addChatList,
     newMessage
   }}>
     {children}

@@ -1,18 +1,23 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import useDiscussions from "../../hooks/useDiscussions"
-import { apiImageUrl } from "../../services/api"
+import { apiFetch, apiImageUrl, BASE_URL } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { useEffect, useRef, useState } from "react"
 import { messagesService } from "../../services/messagesService"
 import { useAuth } from "../../hooks/useAuth"
-import { format, formatRelative } from "date-fns"
+import MessageItem from "./MessageItem"
 
 const Discussion = () => {
   const {token, user} = useAuth()
-  const {chatList, currentDiscussion, setChatList, newMessage} = useDiscussions()
+  const {chatList, currentDiscussion, setChatList, addChatList, newMessage} = useDiscussions()
+  
   const [message, setMessage] = useState("")
   const [parent, setParent] = useState(null) // parent of the new message in the form (reply to)
+  const [seeMoreUrl, setSeeMoreUrl] = useState(null)
+
   const lastMessageRef = useRef(null)
+  const containerRef = useRef(null)
+  const seeMoreRef = useRef(null)
 
   const changeMessageHandler = (e) => {
     setMessage(e.target.value)
@@ -34,10 +39,31 @@ const Discussion = () => {
     setParent(newParent)
   }
 
+  const seeMoreHandler = async () => {
+    const prevScrollTop = containerRef.current.scrollTop
+    const lastSeeMoreOffset = seeMoreRef.current.getBoundingClientRect().top
+
+    const response = await apiFetch(seeMoreUrl, token)
+    if(response) {
+      if(response.data.length > 0) {
+        addChatList(response.data.reverse())
+        setSeeMoreUrl(response.seeMoreUrl)
+      }
+    }
+
+    setTimeout(() => {
+      const newOffset = seeMoreRef.current.getBoundingClientRect().top
+      containerRef.current.scrollTop += newOffset - lastSeeMoreOffset
+    }, 0)
+  }
+
   async function fetchMessages() {
     if(currentDiscussion) {
       const messagesResponse = await messagesService.fetchMessages(currentDiscussion.id, token)
-      if(messagesResponse) setChatList(messagesResponse.data.reverse())
+      if(messagesResponse) {
+        setChatList(messagesResponse.data.reverse())
+        setSeeMoreUrl(messagesResponse.seeMoreUrl)
+      }
     }
   }
 
@@ -47,7 +73,7 @@ const Discussion = () => {
 
   useEffect(() => {
     if(lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({behavior: "smooth", block: "start"})
+      lastMessageRef.current.scrollIntoView({behavior: "smooth"})
     }
   }, [chatList])
 
@@ -65,7 +91,15 @@ const Discussion = () => {
         : <div>Select a discussion</div>
       }
     </div>
-    <div className="px-8 py-4 grow bg-gray-200 overflow-scroll">
+    <div ref={containerRef} className="px-8 py-4 grow bg-gray-200 overflow-scroll">
+      <button 
+        className="block mx-auto px-4 py-1 text-xs border border-gray-400 rounded-lg shadow hover:bg-gray-50"
+        onClick={seeMoreHandler}
+        ref={seeMoreRef}
+      >
+        <FontAwesomeIcon icon="fa-solid fa-plus" className="mr-2" />
+        See more
+      </button>
       {chatList.map(message => <MessageItem 
         key={message.id} 
         message={message} 
@@ -109,63 +143,6 @@ const Discussion = () => {
           </button>
         </div>
       </form>
-    </div>
-  </div>
-}
-
-const MessageItem = ({message, replyToHandler, lastReference}) => {
-  const {user} = useAuth()
-
-  const [now, setNow] = useState(new Date())
-
-  const isMine = (message.sender.id == user.id)
-  const isLong = (message.content.length > 70)
-  const sentAt = Date.parse(message.createdAt)
-
-  useEffect(() => {
-    const dateUpdateInterval = setInterval(() => setNow(new Date()), 10000)
-    return () => clearInterval(dateUpdateInterval)
-  }, [])
-
-  return <div className="w-full my-2" ref={lastReference}>
-    {!isMine && message.start
-      ? <div className="ml-8 font-bold">{message.sender.name}</div>
-      : <></>
-    }
-    <div className="w-full flex">
-      {!isMine && message.start
-        ? <img 
-            src={message.sender.imageUrl ? apiImageUrl(message.sender.imageUrl) : avatar} 
-            alt={message.sender.name} 
-            className="w-6 h-6 object-cover mr-2"
-          /> 
-        : <div className="w-6 mr-2"></div>
-      }
-      {isMine 
-        ? <div 
-            className="w-8 h-8 my-auto ml-auto mr-2 p-3 flex justify-center items-center rounded-full text-gray-300 hover:text-gray-900 hover:bg-gray-300 hover:shadow"
-            onClick={() => replyToHandler(message)}
-          >
-            <FontAwesomeIcon icon="fa-solid fa-arrow-turn-up" />
-          </div>
-        : <></>
-      }
-      <div className={"message"+(isMine ? " mine" : " not-mine")+ (isLong ? " long": "")}>
-        <div>{message.content}</div>
-        <div className="text-xs text-end mt-2">
-          {formatRelative(sentAt, now)}
-          <FontAwesomeIcon icon="fa-solid fa-check-double" className="ml-3" />
-        </div>
-      </div>
-      { !isMine
-        ? <div 
-            className="w-8 h-8 my-auto mx-2 p-3 flex justify-center items-center rounded-full text-gray-300 hover:text-gray-900 hover:bg-gray-300 hover:shadow"
-            onClick={() => replyToHandler(message)}
-          >
-            <FontAwesomeIcon icon="fa-solid fa-arrow-turn-up" />
-          </div>
-        : <></>
-      }
     </div>
   </div>
 }
