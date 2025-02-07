@@ -16,14 +16,16 @@ function updateChatListGroup(chatList) {
   if(!chatList || chatList.length == 0)
     return null
   let owner = chatList[0].sender
+  const length = chatList.length
   chatList[0] = {...chatList[0], start: true}
-  for(let i = 0, l = chatList.length; i < l-1; i++) {
+  for(let i = 0; i < length-1; i++) {
     if(chatList[i+1].sender.id != owner.id) {
       chatList[i] = {...chatList[i], end: true}
       chatList[i+1] = {...chatList[i+1], start: true}
       owner = chatList[i+1].sender
     }
   }
+  chatList[length-1] = {...chatList[length-1], last: true}
   return chatList
 }
 
@@ -48,9 +50,10 @@ function discussionReducer(state, action) {
     }
   }
   if(action.type == "NEW_MESSAGE") {
+    const chats = updateChatListGroup([...state.chatList, {...action.payload}])
     return {
       ...state,
-      chatList: [...state.chatList, {...action.payload}],
+      chatList: chats,
       discussionsList: [
         {...action.payload},
         ...state.discussionsList.filter(discussion => {
