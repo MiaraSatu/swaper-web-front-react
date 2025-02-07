@@ -31,15 +31,20 @@ function updateChatListGroup(chatList) {
 }
 
 function initializeChatListQueu(chatList) {
-  if(!chatList || chatList.length == 0) return null
   const length = chatList.length
+  if(!chatList || length == 0) return []
+  chatList[0] = {...chatList[0], lastTop: true}
   chatList[length - 1] = {...chatList[length - 1], last: true}
+
   return chatList
 }
 
 function updateChatListQueu(oldChatList, newChatList) {
-  const oLength = oldChatList.length
-  oldChatList[oLength - 1] = {...oldChatList[oLength - 1], last: false}
+  oldChatList = oldChatList.map(chat => {
+    if(chat.lastTop) return {...chat, lastTop: false, last: false}
+    return {...chat, last: false}
+  })
+  newChatList[0] = {...newChatList[0], lastTop: true}
   return [...newChatList, ...oldChatList]
 }
 
@@ -71,7 +76,7 @@ function discussionReducer(state, action) {
     }
   }
   if(action.type == "NEW_MESSAGE") {
-    const chats = updateChatListGroup(updateChatListQueu(state.chatList, action.payload))
+    const chats = updateChatListGroup([...state.chatList, action.payload])
     return {
       ...state,
       chatList: [...chats],

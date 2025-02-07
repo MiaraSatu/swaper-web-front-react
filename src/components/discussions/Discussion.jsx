@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import useDiscussions from "../../hooks/useDiscussions"
 import { apiFetch, apiImageUrl, BASE_URL } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { messagesService } from "../../services/messagesService"
 import { useAuth } from "../../hooks/useAuth"
 import MessageItem from "./MessageItem"
@@ -17,7 +17,7 @@ const Discussion = () => {
 
   const lastMessageRef = useRef(null)
   const containerRef = useRef(null)
-  const seeMoreRef = useRef(null)
+  const topRef = useRef(null)
 
   const changeMessageHandler = (e) => {
     setMessage(e.target.value)
@@ -40,9 +40,8 @@ const Discussion = () => {
   }
 
   const seeMoreHandler = async () => {
+    const topOffset = topRef.current.getBoundingClientRect().top
     const prevScrollTop = containerRef.current.scrollTop
-    const lastSeeMoreOffset = seeMoreRef.current.getBoundingClientRect().top
-
     const response = await apiFetch(seeMoreUrl, token)
     if(response) {
       if(response.data.length > 0) {
@@ -51,9 +50,15 @@ const Discussion = () => {
       }
     }
 
+    if(!topRef.current) return null
+
+    // requestAnimationFrame(() => {
+    //   const newOffset = topRef.current.getBoundingClientRect().top
+    //   containerRef.current.scrollTop += newOffset - topOffset
+    // })
     setTimeout(() => {
-      const newOffset = seeMoreRef.current.getBoundingClientRect().top
-      containerRef.current.scrollTop += newOffset - lastSeeMoreOffset
+      const newOffset = topRef.current.getBoundingClientRect().top
+      containerRef.current.scrollTop += newOffset - topOffset
     }, 0)
   }
 
@@ -73,7 +78,7 @@ const Discussion = () => {
 
   useEffect(() => {
     if(lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({behavior: "smooth"})
+      lastMessageRef.current.scrollIntoView({behavior: "smooth", block: "start"})
     }
   }, [chatList])
 
@@ -95,7 +100,6 @@ const Discussion = () => {
       <button 
         className="block mx-auto px-4 py-1 text-xs border border-gray-400 rounded-lg shadow hover:bg-gray-50"
         onClick={seeMoreHandler}
-        ref={seeMoreRef}
       >
         <FontAwesomeIcon icon="fa-solid fa-plus" className="mr-2" />
         See more
@@ -105,6 +109,7 @@ const Discussion = () => {
         message={message} 
         replyToHandler={replyToHandler}
         lastReference={message.last ? lastMessageRef : null}
+        topReference={message.lastTop ? topRef : null}
       />)}
     </div>
     <div className="relative w-full px-8 py-4 bg-gray-200">
