@@ -99,8 +99,9 @@ const Discussion = () => {
     </div>
     <div className="px-8 py-4 grow bg-gray-200 overflow-scroll" ref={messageContainerRef}>
       <button 
-        className="block mx-auto px-4 py-1 text-xs border border-gray-400 rounded-lg shadow hover:bg-gray-50"
+        className="block mx-auto px-4 py-1 text-xs border border-gray-400 rounded-lg shadow hover:bg-gray-50 disabled:bg-gray-50 disabled:text-gray-400"
         onClick={seeMoreHandler}
+        disabled={seeMoreUrl === null}
       >
         <FontAwesomeIcon icon="fa-solid fa-plus" className="mr-2" />
         See more
