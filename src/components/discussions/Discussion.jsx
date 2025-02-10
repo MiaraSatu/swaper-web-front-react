@@ -16,8 +16,8 @@ const Discussion = () => {
   const [seeMoreUrl, setSeeMoreUrl] = useState(null)
 
   const lastMessageRef = useRef(null)
-  const containerRef = useRef(null)
-  const topRef = useRef(null)
+
+  const lastVisibleRef = useRef(null)
 
   const changeMessageHandler = (e) => {
     setMessage(e.target.value)
@@ -40,8 +40,6 @@ const Discussion = () => {
   }
 
   const seeMoreHandler = async () => {
-    const topOffset = topRef.current.getBoundingClientRect().top
-    const prevScrollTop = containerRef.current.scrollTop
     const response = await apiFetch(seeMoreUrl, token)
     if(response) {
       if(response.data.length > 0) {
@@ -49,17 +47,6 @@ const Discussion = () => {
         setSeeMoreUrl(response.seeMoreUrl)
       }
     }
-
-    if(!topRef.current) return null
-
-    // requestAnimationFrame(() => {
-    //   const newOffset = topRef.current.getBoundingClientRect().top
-    //   containerRef.current.scrollTop += newOffset - topOffset
-    // })
-    setTimeout(() => {
-      const newOffset = topRef.current.getBoundingClientRect().top
-      containerRef.current.scrollTop += newOffset - topOffset
-    }, 0)
   }
 
   async function fetchMessages() {
@@ -96,7 +83,7 @@ const Discussion = () => {
         : <div>Select a discussion</div>
       }
     </div>
-    <div ref={containerRef} className="px-8 py-4 grow bg-gray-200 overflow-scroll">
+    <div className="px-8 py-4 grow bg-gray-200 overflow-scroll">
       <button 
         className="block mx-auto px-4 py-1 text-xs border border-gray-400 rounded-lg shadow hover:bg-gray-50"
         onClick={seeMoreHandler}
@@ -104,12 +91,11 @@ const Discussion = () => {
         <FontAwesomeIcon icon="fa-solid fa-plus" className="mr-2" />
         See more
       </button>
-      {chatList.map(message => <MessageItem 
+      {chatList.map((message, index) => <MessageItem 
         key={message.id} 
         message={message} 
         replyToHandler={replyToHandler}
         lastReference={message.last ? lastMessageRef : null}
-        topReference={message.lastTop ? topRef : null}
       />)}
     </div>
     <div className="relative w-full px-8 py-4 bg-gray-200">

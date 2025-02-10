@@ -15,7 +15,7 @@ const DiscussionContext = createContext(initialState)
 
 function updateChatListGroup(chatList) {
   if(!chatList || chatList.length == 0)
-    return null
+    return []
   chatList = [...chatList.map(chat => ({...chat, start: false, end: false}))]
   let owner = chatList[0].sender
   const length = chatList.length
@@ -33,19 +33,20 @@ function updateChatListGroup(chatList) {
 function initializeChatListQueu(chatList) {
   const length = chatList.length
   if(!chatList || length == 0) return []
-  chatList[0] = {...chatList[0], lastTop: true}
   chatList[length - 1] = {...chatList[length - 1], last: true}
-
   return chatList
 }
 
-function updateChatListQueu(oldChatList, newChatList) {
-  oldChatList = oldChatList.map(chat => {
-    if(chat.lastTop) return {...chat, lastTop: false, last: false}
-    return {...chat, last: false}
+function updateChatListQueu(chatList) {
+  return chatList.map(chat => {
+    if(chat.last) return {...chat, last: false}
+    return chat
   })
-  newChatList[0] = {...newChatList[0], lastTop: true}
-  return [...newChatList, ...oldChatList]
+}
+
+function updateChatListQueuOnNewChat(chats, chat) {
+  chats = updateChatListQueu(chats)
+  return [...chats, {...chat, last: true}]
 }
 
 function discussionReducer(state, action) {
@@ -69,17 +70,17 @@ function discussionReducer(state, action) {
     }
   }
   if(action.type == "ADD_CHAT_LIST") {
-    const chats = updateChatListGroup(updateChatListQueu(state.chatList, action.payload))
+    const chats = updateChatListGroup(updateChatListQueu([...action.payload, ...state.chatList]))
     return {
       ...state,
       chatList: chats
     }
   }
   if(action.type == "NEW_MESSAGE") {
-    const chats = updateChatListGroup([...state.chatList, action.payload])
+    const chats = updateChatListQueuOnNewChat(state.chatList, action.payload)
     return {
       ...state,
-      chatList: [...chats],
+      chatList: chats,
       discussionsList: [
         {...action.payload},
         ...state.discussionsList.filter(discussion => {

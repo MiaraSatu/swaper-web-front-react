@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { formatRelative } from "date-fns"
 import avatar from "../../assets/User_Avatar_2.png"
 
-const MessageItem = ({message, replyToHandler, lastReference, topReference}) => {
+const MessageItem = ({message, replyToHandler, lastReference}) => {
   const {user} = useAuth()
 
   const [now, setNow] = useState(new Date())
@@ -23,7 +23,7 @@ const MessageItem = ({message, replyToHandler, lastReference, topReference}) => 
       ? <div className="ml-8 font-bold">{message.sender.name}</div>
       : <></>
     }
-    <div className="w-full flex" ref={topReference}>
+    <div className="w-full flex">
       {!isMine && message.start
         ? <img 
             src={message.sender.imageUrl ? apiImageUrl(message.sender.imageUrl) : avatar} 
