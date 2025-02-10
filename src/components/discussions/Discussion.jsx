@@ -16,8 +16,9 @@ const Discussion = () => {
   const [seeMoreUrl, setSeeMoreUrl] = useState(null)
 
   const lastMessageRef = useRef(null)
-
-  const lastVisibleRef = useRef(null)
+  const messageContainerRef = useRef(null)
+  const topRef = useRef(null)
+  const lastTopRef = useRef(null)
 
   const changeMessageHandler = (e) => {
     setMessage(e.target.value)
@@ -71,6 +72,16 @@ const Discussion = () => {
     }
   }, [chatList])
 
+  useLayoutEffect(() =>{
+    if(reactivityStatus == "lastTopMessage") {
+      if(topRef.current && lastTopRef.current && messageContainerRef.current) {
+        const lastTopPosition = lastTopRef.current.getBoundingClientRect().top
+        const topPosition = topRef.current.getBoundingClientRect().top
+        messageContainerRef.current.scrollTop += lastTopPosition - topPosition
+      }
+    }
+  }, [chatList])
+
   return <div className="flex flex-col w-full h-full">
     <div className="h-16 bg-gray-100 px-8 py-2 shadow">
       {currentDiscussion
@@ -85,7 +96,7 @@ const Discussion = () => {
         : <div>Select a discussion</div>
       }
     </div>
-    <div className="px-8 py-4 grow bg-gray-200 overflow-scroll">
+    <div className="px-8 py-4 grow bg-gray-200 overflow-scroll" ref={messageContainerRef}>
       <button 
         className="block mx-auto px-4 py-1 text-xs border border-gray-400 rounded-lg shadow hover:bg-gray-50"
         onClick={seeMoreHandler}
@@ -94,11 +105,14 @@ const Discussion = () => {
         See more
       </button>
       {chatList.map((message, index) => <MessageItem 
-        key={message.id} 
-        message={message} 
-        replyToHandler={replyToHandler}
-        lastReference={message.last ? lastMessageRef : null}
-      />)}
+            key={message.id} 
+            message={message} 
+            replyToHandler={replyToHandler}
+            lastReference={message.last ? lastMessageRef : null}
+            topReference={message.head ? topRef : null}
+            lastTopReference={message.lastTop ? lastTopRef : null}
+          />)
+      }
     </div>
     <div className="relative w-full px-8 py-4 bg-gray-200">
       {parent   

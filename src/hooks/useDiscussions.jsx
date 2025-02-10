@@ -37,15 +37,22 @@ function updateChatListGroup(chatList) {
 function initializeChatListQueu(chatList) {
   const length = chatList.length
   if(!chatList || length == 0) return []
+  chatList[0] = {...chatList[0], head: true}
   chatList[length - 1] = {...chatList[length - 1], last: true}
   return chatList
 }
 
-function updateChatListQueu(chatList) {
-  return chatList.map(chat => {
-    if(chat.last) return {...chat, last: false}
-    return chat
+function updateChatListQueu(chatList, paginationLimit = 10) {
+  const chatLen = chatList.length
+  if(!chatList || chatLen == 0) return []
+  chatList = chatList.map(chat => {
+    // if(chat.last) return {...chat, last: false, lastTop: false}
+    return {...chat, last: false, lastTop: false, head: false}
   })
+  if(chatLen > paginationLimit) 
+    chatList[paginationLimit] = {...chatList[paginationLimit], lastTop: true}
+  chatList[0] = {...chatList[0], head: true}
+  return chatList
 }
 
 function updateChatListQueuOnNewChat(chats, chat) {
@@ -78,7 +85,7 @@ function discussionReducer(state, action) {
     const chats = updateChatListGroup(updateChatListQueu([...action.payload, ...state.chatList]))
     return {
       ...state,
-      chatList: chats,
+      chatList: [...chats],
       reactivityStatus: "lastTopMessage"
     }
   }
