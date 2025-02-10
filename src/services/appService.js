@@ -6,14 +6,15 @@ function getDiscussionSubject(discussion, user) {
 }
 
 function mergeDuplicated(list) {
-  return Object.values(list.reduce((acc, item) => {
-    if(acc[item.id]) {
-      acc[item.id] = {...acc[item.id], ...item}
+  const map = new Map()
+  list.forEach(item => {
+    if(map.has(item.id)) {
+      map.set(item.id, {...map.get(item.id), ...item})
     } else {
-      acc[item.id] = item
+      map.set(item.id, item)
     }
-    return acc
-  }, {}))
+  })
+  return Array.from(map.values())
 }
 
 export const appService = {
