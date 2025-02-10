@@ -116,7 +116,7 @@ const Discussion = () => {
     </div>
     <div className="relative w-full px-8 py-4 bg-gray-200">
       {parent   
-      ? <div className="absolute bottom-full w-1/2 p-4 shadow-lg bg-white border border-gray-300 rounded opacity-55">
+      ? <div className="absolute bottom-full w-1/2 p-4 shadow-lg bg-white border border-gray-300 rounded opacity-85">
           <div className="flex items-center font-bold">
             <FontAwesomeIcon icon="fa-solid fa-arrow-turn-up" className="text-sm mr-2" />
             Reply to {parent.sender.id == user.id ? "you" : parent.sender.name}
