@@ -4,6 +4,7 @@ const initialState = {
   currentDiscussion: null,
   discussionsList: [],
   chatList: [],
+  reactivityStatus: null,
   setCurrentDiscussion: () => {},
   setDiscussionsList: () => {},
   setChatList: () => {},
@@ -12,6 +13,9 @@ const initialState = {
 }
 
 const DiscussionContext = createContext(initialState)
+
+// chatListGroup: manages [start: boolean, end: boolean] keys
+// chatListQueu: manages [last: boolean, top: boolean, lastTop: boolean] keys
 
 function updateChatListGroup(chatList) {
   if(!chatList || chatList.length == 0)
@@ -66,14 +70,16 @@ function discussionReducer(state, action) {
     const chats = updateChatListGroup(initializeChatListQueu(action.payload))
     return {
       ...state,
-      chatList: [...chats]
+      chatList: [...chats],
+      reactivityStatus: "lastMessage"
     }
   }
   if(action.type == "ADD_CHAT_LIST") {
     const chats = updateChatListGroup(updateChatListQueu([...action.payload, ...state.chatList]))
     return {
       ...state,
-      chatList: chats
+      chatList: chats,
+      reactivityStatus: "lastTopMessage"
     }
   }
   if(action.type == "NEW_MESSAGE") {
@@ -87,7 +93,8 @@ function discussionReducer(state, action) {
           return !((discussion.sender.id == action.payload.sender.id && discussion.receiver.id == action.payload.receiver.id) || 
           (discussion.sender.id == action.payload.receiver.id && discussion.receiver.id == action.payload.sender.id))
         })
-      ]
+      ],
+      reactivityStatus: "lastMessage"
     }
   }
 
@@ -121,6 +128,7 @@ const DiscussionContextProvider = ({children}) => {
     currentDiscussion: state.currentDiscussion,
     discussionsList: state.discussionsList,
     chatList: state.chatList,
+    reactivityStatus: state.reactivityStatus,
     setCurrentDiscussion,
     setDiscussionsList,
     setChatList,

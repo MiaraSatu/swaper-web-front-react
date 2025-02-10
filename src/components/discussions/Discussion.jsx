@@ -9,7 +9,7 @@ import MessageItem from "./MessageItem"
 
 const Discussion = () => {
   const {token, user} = useAuth()
-  const {chatList, currentDiscussion, setChatList, addChatList, newMessage} = useDiscussions()
+  const {chatList, currentDiscussion, reactivityStatus, setChatList, addChatList, newMessage} = useDiscussions()
   
   const [message, setMessage] = useState("")
   const [parent, setParent] = useState(null) // parent of the new message in the form (reply to)
@@ -64,8 +64,10 @@ const Discussion = () => {
   }, [currentDiscussion])
 
   useEffect(() => {
-    if(lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({behavior: "smooth", block: "start"})
+    if(reactivityStatus == "lastMessage") {
+      if(lastMessageRef.current) {
+        lastMessageRef.current.scrollIntoView({behavior: "smooth", block: "start"})
+      }
     }
   }, [chatList])
 
