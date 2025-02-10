@@ -23,6 +23,9 @@
   }
   .discussion-item{
     &.seen {
+      @apply bg-gray-100;
+    }
+    &.new {
       @apply bg-gray-200;
     }
   }

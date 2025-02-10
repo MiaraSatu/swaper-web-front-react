@@ -23,8 +23,8 @@ const DiscussionItem = ({discussion}) => {
 
   return <div 
       key={discussion.id+discussion.type}
-      className={"discussion-item flex content-between my-2 p-2 rounded cursor-pointer hover:bg-gray-50 hover:shadow"+ (discussion.isSeen ? "" : " seen") }
-      onClick={() => setCurrentDiscussion(subject)}
+      className={"discussion-item flex content-between my-2 p-2 rounded cursor-pointer hover:bg-gray-50 hover:shadow"+ (discussion.unreadCount == 0 ? " seen" : " new") }
+      onClick={() => setCurrentDiscussion({discussion, subject})}
     >
       <div className="flex w-4/5">
         <img 
@@ -39,10 +39,13 @@ const DiscussionItem = ({discussion}) => {
       </div>
       <div className="w-1/5 text-xs text-right text-gray-500 font-semibold">
         {formatDistance(sentAt, now)}
-        <div className="flex items-center justify-center ml-auto w-5 h-5 bg-gray-900 text-white rounded-full">
-          1
+        { discussion.unreadCount > 0 
+          ? <div className="flex items-center justify-center ml-auto w-5 h-5 bg-gray-900 text-white rounded-full">
+              {discussion.unreadCount}
+            </div>
+          : <></>
+        }
         </div>
-      </div>
   </div>
 }
 

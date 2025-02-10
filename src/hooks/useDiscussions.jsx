@@ -68,7 +68,11 @@ function discussionReducer(state, action) {
   if(action.type == "SET_CURRENT_DISCUSSION") {
     return {
       ...state,
-      currentDiscussion: {...action.payload}
+      currentDiscussion: {...action.payload.subject},
+      discussionsList: [...state.discussionsList.map(discussion => {
+        if(discussion.id == action.payload.discussion.id) return {...discussion, uncheckCount: 0, unreadCount: 0}
+        return discussion
+      })]
     }
   }
   if(action.type == "SET_DISCUSSIONS_LIST") {
