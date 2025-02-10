@@ -5,6 +5,18 @@ function getDiscussionSubject(discussion, user) {
       : discussion.boxReceiver
 }
 
+function mergeDuplicated(list) {
+  return Object.values(list.reduce((acc, item) => {
+    if(acc[item.id]) {
+      acc[item.id] = {...acc[item.id], ...item}
+    } else {
+      acc[item.id] = item
+    }
+    return acc
+  }, {}))
+}
+
 export const appService = {
-  getDiscussionSubject
+  getDiscussionSubject,
+  mergeDuplicated
 }

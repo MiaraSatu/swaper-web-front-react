@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
+import { appService } from "../services/appService";
 
 const initialState = {
   currentDiscussion: null,
@@ -31,7 +32,7 @@ function updateChatListGroup(chatList) {
       owner = chatList[i+1].sender
     }
   }
-  return chatList
+  return appService.mergeDuplicated(chatList)
 }
 
 function initializeChatListQueu(chatList) {
@@ -39,6 +40,7 @@ function initializeChatListQueu(chatList) {
   if(!chatList || length == 0) return []
   chatList[0] = {...chatList[0], head: true}
   chatList[length - 1] = {...chatList[length - 1], last: true}
+  
   return chatList
 }
 

@@ -6,6 +6,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { messagesService } from "../../services/messagesService"
 import { useAuth } from "../../hooks/useAuth"
 import MessageItem from "./MessageItem"
+import { appService } from "../../services/appService"
 
 const Discussion = () => {
   const {token, user} = useAuth()
