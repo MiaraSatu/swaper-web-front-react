@@ -51,8 +51,10 @@ function updateChatListQueu(chatList, paginationLimit = 10) {
     // if(chat.last) return {...chat, last: false, lastTop: false}
     return {...chat, last: false, lastTop: false, head: false}
   })
+  const resteInLastPage = parseInt(chatList.length % paginationLimit)
+  const lastTopIndex = (resteInLastPage > 0) ? resteInLastPage : paginationLimit
   if(chatLen > paginationLimit) 
-    chatList[paginationLimit] = {...chatList[paginationLimit], lastTop: true}
+    chatList[lastTopIndex] = {...chatList[lastTopIndex], lastTop: true}
   chatList[0] = {...chatList[0], head: true}
   return chatList
 }
