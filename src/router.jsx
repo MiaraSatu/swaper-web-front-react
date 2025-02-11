@@ -4,18 +4,12 @@ import LeftBar from "./components/LeftBar";
 import Friends from "./components/Friends";
 import Received from "./components/friends/Received";
 import Sent from "./components/friends/Sent";
+import Home from "./components/Home";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <div className="w-full h-screen flex"> 
-      <div className="w-1/6 h-full">
-        <LeftBar />
-      </div>
-      <div className="w-5/6 h-full">
-        <Outlet />
-      </div>
-    </div>,
+    element: <Home />,
     children: [
       {
         path: "",

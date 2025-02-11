@@ -3,22 +3,31 @@ import { useAuth } from "../hooks/useAuth"
 import { NavLink } from "react-router-dom"
 import { BASE_URL } from "../services/api"
 import avatar from "../assets/User_Avatar_2.png"
+import useHome from "../hooks/useHome"
 
 const LeftBar = () => {
   const {logout, user} = useAuth()
+  const {newMessageCount} = useHome()
 
   return <div className="w-full h-full flex flex-col justify-between py-4 px-8 bg-gray-900">
     <div className="w-full text-3xl">
       <span className="text-indigo-600">We</span>
       <span className="text-gray-100">Chat</span>
     </div>
-    <ul className="flex flex-col grow mt-8" id="left-bar-options">
+    <ul id="left-bar-options" className="flex flex-col grow mt-8">
       <li>
         <NavLink to={{pathname: "/"}}>
           <div className="icon">
             <FontAwesomeIcon icon="fa-solid fa-envelope" />
           </div>
           Messages
+          {
+            newMessageCount > 0
+            ? <div className="w-6 h-6 flex justify-center items-center ml-auto text-xs rounded-full text-gray-900 bg-gray-50">
+                {newMessageCount}
+              </div>
+            : <></>
+          }
         </NavLink>
       </li>
       <li>
