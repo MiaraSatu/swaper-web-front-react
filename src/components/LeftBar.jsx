@@ -1,19 +1,21 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "../hooks/useAuth"
 import { NavLink } from "react-router-dom"
-import { apiCheckMessage, BASE_URL } from "../services/api"
+import { apiCountUncheckedMessage, apiCountUnreadMessage } from "../services/api"
 import avatar from "../assets/User_Avatar_2.png"
 import useHome from "../hooks/useHome"
 import { useEffect } from "react"
 
 const LeftBar = () => {
   const {logout, user, token} = useAuth()
-  const {newMessageCount, setNewMessageCount} = useHome()
+  const {unreadMessageCount, setUnreadMessageCount, setUncheckedMessageCount} = useHome()
 
   useEffect(() => {
     const checkDataInterval = setInterval(async () => {
-      const messageCount = await apiCheckMessage(token)
-      if(messageCount) setNewMessageCount(messageCount)
+      const messageCount = await apiCountUnreadMessage(token)
+      if(messageCount != null) setUnreadMessageCount(messageCount)
+      const uncheckedCount = await apiCountUncheckedMessage(token)
+      if(uncheckedCount != null && uncheckedCount > 0) setUncheckedMessageCount(uncheckedCount)
     }, 5000);
     return () => clearInterval(checkDataInterval)
   }, [])
@@ -31,9 +33,9 @@ const LeftBar = () => {
           </div>
           Messages
           {
-            newMessageCount > 0
+            unreadMessageCount > 0
             ? <div className="w-6 h-6 flex justify-center items-center ml-auto text-xs rounded-full text-gray-900 bg-gray-50">
-                {newMessageCount}
+                {unreadMessageCount}
               </div>
             : <></>
           }

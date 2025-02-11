@@ -1,17 +1,25 @@
 import { createContext, useContext, useReducer } from "react";
 
 const initialState = {
-  newMessageCount: 0,
-  setNewMessageCount: () => null
+  unreadMessageCount: 0,
+  uncheckedMessageCount: 0,
+  setUnreadMessageCount: () => null,
+  setUncheckedMessageCount: () => null
 }
 
 const HomeContext = createContext(initialState)
 
 function homeReducer(state, action) {
-  if(action.type == "SET_NEW_MESSAGE_COUNT") {
+  if(action.type == "SET_UNREAD_MESSAGE_COUNT") {
     return {
       ...state,
-      newMessageCount: action.payload
+      unreadMessageCount: action.payload
+    }
+  }
+  if(action.type == "SET_UNCHECKED_MESSAGE_COUNT") {
+    return {
+      ...state,
+      uncheckedMessageCount: action.payload
     }
   }
 
@@ -21,13 +29,19 @@ function homeReducer(state, action) {
 const HomeContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(homeReducer, initialState)
 
-  const setNewMessageCount = (count) => {
-    if(count !== null) dispatch({type: "SET_NEW_MESSAGE_COUNT", payload: count})
+  const setUnreadMessageCount = (count) => {
+    if(count !== null) dispatch({type: "SET_UNREAD_MESSAGE_COUNT", payload: count})
+  }
+
+  const setUncheckedMessageCount = (count) => {
+    if(count !== null) dispatch({type: "SET_UNCHECKED_MESSAGE_COUNT", payload: count})
   }
 
   return <HomeContext.Provider value={{
-    newMessageCount: state.newMessageCount,
-    setNewMessageCount
+    unreadMessageCount: state.unreadMessageCount,
+    uncheckedMessageCount: state.uncheckedMessageCount,
+    setUnreadMessageCount,
+    setUncheckedMessageCount,
   }}>
     {children}
   </HomeContext.Provider>

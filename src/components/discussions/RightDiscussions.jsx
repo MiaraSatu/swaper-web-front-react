@@ -10,20 +10,28 @@ import useHome from "../../hooks/useHome"
 const RightDiscussions = () => {
   const {token} = useAuth()
   const {discussionsList, setDiscussionsList} = useDiscussions()
+  const {uncheckedMessageCount} = useHome()
 
   const searchSubmitHandler = async (e) => {
     e.preventDefault()
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      const discussionsResponse = await messagesService.fetchDiscussions(token)
-      if(discussionsResponse) {
-        setDiscussionsList(discussionsResponse.data)
-      }
+  async function fetchData() {
+    const discussionsResponse = await messagesService.fetchDiscussions(token)
+    if(discussionsResponse) {
+      setDiscussionsList(discussionsResponse.data)
     }
+  }
+
+  useEffect(() => {
     fetchData()
   }, [])
+
+  useEffect(() => {
+    if(uncheckedMessageCount != null && uncheckedMessageCount > 0) {
+      fetchData()
+    }
+  }, [uncheckedMessageCount])
 
   return <>
     <div className="flex justify-between items-center text-lg font-bold">
