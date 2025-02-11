@@ -7,10 +7,13 @@ import { messagesService } from "../../services/messagesService"
 import { useAuth } from "../../hooks/useAuth"
 import useHome from "../../hooks/useHome"
 import MessageItem from "./MessageItem"
+import { useParams } from "react-router-dom"
 
 const Discussion = () => {
+  const {discussion_id} = useParams()
+
   const {token, user} = useAuth()
-  const {chatList, currentDiscussion, reactivityStatus, setChatList, addChatList, newMessage} = useDiscussions()
+  const {chatList, currentDiscussion, reactivityStatus, setChatList, addChatList, newMessage, setCurrentDiscussion} = useDiscussions()
   const {uncheckedMessageCount} = useHome()
   
   const [message, setMessage] = useState("")
@@ -61,6 +64,16 @@ const Discussion = () => {
       }
     }
   }
+
+  useEffect(() => {
+    async function fetchDiscussion(id) {
+      const discussion = await messagesService.fetchDiscussion(id, token)
+      if(discussion != null) {setCurrentDiscussion(discussion)}
+    }
+    if(discussion_id) {
+      fetchDiscussion(discussion_id)
+    }
+  }, [])
 
   useEffect(() => {
     fetchMessages()

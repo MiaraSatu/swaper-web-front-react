@@ -13,6 +13,18 @@ async function fetchDiscussions(token) {
   return response
 }
 
+async function fetchDiscussion(id, token) {
+  let response = null
+  await axios.get(API_URL+"/discussion/"+id, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when fetching discussion", error)
+  })
+  return response
+}
+
 async function fetchMessages(exchangerId, token, type = "sample") {
   let response = null
   await axios.get(API_URL+"/messages/"+exchangerId+"/"+(type == "sample" ? "0" : "1"), {headers: {Authorization: "bearer "+token}})
@@ -37,4 +49,4 @@ async function sendMessage(message, type, receivedId, token, replyTo = null) {
   return response
 }
 
-export const messagesService = {fetchDiscussions, fetchMessages, sendMessage}
+export const messagesService = {fetchDiscussions, fetchDiscussion, fetchMessages, sendMessage}

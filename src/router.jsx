@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
     element: <Home />,
     children: [
       {
-        path: "",
+        path: "/:discussion_id?",
         element: 
         <Discussions />
       },

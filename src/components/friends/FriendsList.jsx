@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/useAuth"
 import { apiFetch, apiImageUrl } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useNavigate } from "react-router-dom"
 
 
 const FriendsList = () => {
@@ -42,6 +43,7 @@ const FriendsList = () => {
 }
 
 const FriendItem = ({friend}) => {
+  const navigate = useNavigate()
 
   return <div className="flex my-3 p-3 rounded shadow-md bg-gray-100">
     <div className="w-16 h-16 rounded-full min-w-16">
@@ -51,7 +53,10 @@ const FriendItem = ({friend}) => {
       <div className="font-semibold">{friend.name}</div>
       <div className="text-sm text-gray-500">{friend.email}</div>
       <div className="w-full mt-2 flex justify-end">
-        <button className="py-1 px-3 text-sm rounded-md text-gray-50 bg-gray-900">
+        <button 
+          className="py-1 px-3 text-sm rounded-md text-gray-50 bg-gray-900"
+          onClick={() => navigate("/"+friend.id)}
+        >
           <FontAwesomeIcon icon="fa-solid fa-envelope" className="mr-2" />
           Chat
         </button>
