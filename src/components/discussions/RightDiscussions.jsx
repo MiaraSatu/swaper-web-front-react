@@ -10,7 +10,6 @@ import useHome from "../../hooks/useHome"
 const RightDiscussions = () => {
   const {token} = useAuth()
   const {discussionsList, setDiscussionsList} = useDiscussions()
-  const {setNewMessageCount} = useHome()
 
   const searchSubmitHandler = async (e) => {
     e.preventDefault()
@@ -25,14 +24,6 @@ const RightDiscussions = () => {
     }
     fetchData()
   }, [])
-
-  useEffect(() => {
-    let count = 0
-    for (const discussion of discussionsList) {
-      count+=(discussion.unreadCount > 0) ? 1 : 0;
-    }
-    setNewMessageCount(count)
-  }, [discussionsList])
 
   return <>
     <div className="flex justify-between items-center text-lg font-bold">

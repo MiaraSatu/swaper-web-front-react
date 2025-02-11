@@ -1,13 +1,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "../hooks/useAuth"
 import { NavLink } from "react-router-dom"
-import { BASE_URL } from "../services/api"
+import { apiCheckMessage, BASE_URL } from "../services/api"
 import avatar from "../assets/User_Avatar_2.png"
 import useHome from "../hooks/useHome"
+import { useEffect } from "react"
 
 const LeftBar = () => {
-  const {logout, user} = useAuth()
-  const {newMessageCount} = useHome()
+  const {logout, user, token} = useAuth()
+  const {newMessageCount, setNewMessageCount} = useHome()
+
+  useEffect(() => {
+    const checkDataInterval = setInterval(async () => {
+      const messageCount = await apiCheckMessage(token)
+      if(messageCount) setNewMessageCount(messageCount)
+    }, 5000);
+    return () => clearInterval(checkDataInterval)
+  }, [])
 
   return <div className="w-full h-full flex flex-col justify-between py-4 px-8 bg-gray-900">
     <div className="w-full text-3xl">
