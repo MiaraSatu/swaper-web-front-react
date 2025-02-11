@@ -24,7 +24,7 @@ const DiscussionItem = ({discussion}) => {
   return <div 
       key={discussion.id+discussion.type}
       className={"discussion-item flex content-between my-2 p-2 rounded cursor-pointer hover:bg-gray-50 hover:shadow"+ (discussion.unreadCount == 0 ? " seen" : " new") }
-      onClick={() => setCurrentDiscussion({discussion, subject})}
+      onClick={() => setCurrentDiscussion(subject)}
     >
       <div className="flex w-4/5">
         <img 

@@ -68,7 +68,7 @@ function discussionReducer(state, action) {
   if(action.type == "SET_CURRENT_DISCUSSION") {
     return {
       ...state,
-      currentDiscussion: {...action.payload.subject}
+      currentDiscussion: {...action.payload}
     }
   }
   if(action.type == "SET_DISCUSSIONS_LIST") {
