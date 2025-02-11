@@ -5,12 +5,13 @@ import avatar from "../../assets/User_Avatar_2.png"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { messagesService } from "../../services/messagesService"
 import { useAuth } from "../../hooks/useAuth"
+import useHome from "../../hooks/useHome"
 import MessageItem from "./MessageItem"
-import { appService } from "../../services/appService"
 
 const Discussion = () => {
   const {token, user} = useAuth()
   const {chatList, currentDiscussion, reactivityStatus, setChatList, addChatList, newMessage} = useDiscussions()
+  const {uncheckedMessageCount} = useHome()
   
   const [message, setMessage] = useState("")
   const [parent, setParent] = useState(null) // parent of the new message in the form (reply to)
@@ -72,6 +73,12 @@ const Discussion = () => {
       }
     }
   }, [chatList])
+
+  useEffect(() => {
+    if(uncheckedMessageCount != null && uncheckedMessageCount > 0) {
+      fetchMessages()
+    }
+  }, [uncheckedMessageCount])
 
   useLayoutEffect(() =>{
     if(reactivityStatus == "lastTopMessage") {

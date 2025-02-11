@@ -8,14 +8,14 @@ import { useEffect } from "react"
 
 const LeftBar = () => {
   const {logout, user, token} = useAuth()
-  const {unreadMessageCount, setUnreadMessageCount, setUncheckedMessageCount} = useHome()
+  const {unreadMessageCount, uncheckedMessageCount, setUnreadMessageCount, setUncheckedMessageCount} = useHome()
 
   useEffect(() => {
     const checkDataInterval = setInterval(async () => {
       const messageCount = await apiCountUnreadMessage(token)
       if(messageCount != null) setUnreadMessageCount(messageCount)
       const uncheckedCount = await apiCountUncheckedMessage(token)
-      if(uncheckedCount != null && uncheckedCount > 0) setUncheckedMessageCount(uncheckedCount)
+      if(uncheckedCount != null) setUncheckedMessageCount(uncheckedCount)
     }, 5000);
     return () => clearInterval(checkDataInterval)
   }, [])
@@ -31,7 +31,7 @@ const LeftBar = () => {
           <div className="icon">
             <FontAwesomeIcon icon="fa-solid fa-envelope" />
           </div>
-          Messages
+          Messages ({uncheckedMessageCount})
           {
             unreadMessageCount > 0
             ? <div className="w-6 h-6 flex justify-center items-center ml-auto text-xs rounded-full text-gray-900 bg-gray-50">
