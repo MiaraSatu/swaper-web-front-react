@@ -17,7 +17,17 @@ function mergeDuplicated(list) {
   return Array.from(map.values())
 }
 
+function getMessageStatus(message) {
+  if(!message) return null
+  // [sent, ignored, seen]
+  if(message.seen) return "seen"
+  if(message.checked) return "ignored"
+  console.log("passed here, message status")
+  return "sent"
+}
+
 export const appService = {
   getDiscussionSubject,
-  mergeDuplicated
+  mergeDuplicated,
+  getMessageStatus
 }

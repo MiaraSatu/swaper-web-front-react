@@ -6,6 +6,7 @@ import avatar from "../../assets/User_Avatar_2.png"
 import useDiscussions from "../../hooks/useDiscussions"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { appService } from "../../services/appService"
+import MessageStatus from "./MessageStatus"
 
 const DiscussionItem = ({discussion}) => {
   const {user} = useAuth()
@@ -46,7 +47,7 @@ const DiscussionItem = ({discussion}) => {
       </div>
       <div className="w-4/5 pl-1">
         <div className="flex items-center justify-between">
-          <div className={"overflow-hidden text-ellipsis text-md box-border" + (discussion.unreadCount > 0 ? " font-semibold text-red-700" : "")}>
+          <div className={"overflow-hidden text-ellipsis text-md box-border" + (discussion.unreadCount > 0 ? " font-semibold" : "")}>
             {subject.name}
           </div>
           <div className="text-xs text-nowrap text-gray-400 ml-1">
@@ -55,14 +56,14 @@ const DiscussionItem = ({discussion}) => {
         </div>
         <div className="flex items-center justify-between">
           <div className="overflow-hidden text-ellipsis text-nowrap text-sm text-gray-500">
-            {discussion.content}
+            {(discussion.sender.id == user.id ? "You: ": "") + discussion.content}
           </div>
           <div>
             {discussion.unreadCount > 0
               ? <div className="flex items-center justify-center ml-auto w-5 h-5 text-xs bg-gray-900 text-white rounded-full">
                   {discussion.unreadCount}
                 </div>
-              : <></>
+              : <MessageStatus message={discussion} />
             }
           </div>
         </div>

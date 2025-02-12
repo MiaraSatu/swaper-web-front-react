@@ -3,6 +3,7 @@ import { useAuth } from "../../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { formatRelative } from "date-fns"
 import avatar from "../../assets/User_Avatar_2.png"
+import MessageStatus from "./MessageStatus"
 
 const MessageItem = ({message, replyToHandler, lastReference, topReference, lastTopReference}) => {
   const {user} = useAuth()
@@ -49,7 +50,9 @@ const MessageItem = ({message, replyToHandler, lastReference, topReference, last
           <div>{message.content}</div>
           <div className="text-xs text-end mt-2">
             {formatRelative(sentAt, now)}
-            <FontAwesomeIcon icon="fa-solid fa-check-double" className="ml-3" />
+            {/* <FontAwesomeIcon icon="fa-solid fa-check-double" className="ml-3" /> */}
+            <span className="mr-2"></span>
+            <MessageStatus message={message} />
           </div>
         </div>
         { !isMine
