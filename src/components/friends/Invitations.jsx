@@ -14,7 +14,6 @@ import Sent from "./Sent"
 
 const Invitations = () => {
   const {token} = useAuth()
-  const {setRequests, setSuggestionsList} = useFriends()
   const {acceptRequest, refuseRequest, cancelRequest} = useFriends()
 
   const navigate = useNavigate()
@@ -45,18 +44,6 @@ const Invitations = () => {
       navigate("/friends/suggestions")
     }
   }
-
-  useEffect(() => {
-    const fetchRequests = async () => {
-      const receivedResponse = await usersService.fetchPaginedInvitations("received", token)
-      const sentResponse = await usersService.fetchPaginedInvitations("sent", token)
-      if(receivedResponse)
-        setRequests("received", receivedResponse.data, true)
-      if(sentResponse)
-        setRequests("sent", sentResponse.data, true)
-    }
-    fetchRequests()
-  }, [])
 
   return <div className="w-full">
     <div className="text-xl font-bold">

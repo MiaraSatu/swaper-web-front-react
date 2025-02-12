@@ -7,6 +7,8 @@ import Sent from "./components/friends/Sent";
 import Home from "./components/Home";
 import Suggestions from "./components/friends/Suggestions";
 import Invitations from "./components/friends/Invitations";
+import { DiscussionContextProvider } from "./hooks/useDiscussions";
+import { FriendsContextProvider } from "./hooks/useFriends";
 
 export const router = createBrowserRouter([
   {
@@ -15,12 +17,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: ":discussion_id?",
-        element: 
-        <Discussions />
+        element: <DiscussionContextProvider>
+          <Discussions />
+        </DiscussionContextProvider>
       },
       {
         path: "friends",
-        element: <Friends />,
+        element: <FriendsContextProvider>
+          <Friends />
+        </FriendsContextProvider>,
         children: [
           {index: true, element: <Navigate to="suggestions" replace />},
           {

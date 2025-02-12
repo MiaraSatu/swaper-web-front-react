@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 import InvitationModal from "./InvitationModal"
 
 const Suggestions = () => {
-  const {suggestionsList, setSuggestionsList} = useFriends()
+  const {suggestionsList} = useFriends()
   const {token} = useAuth()
   const navigate = useNavigate()
 
@@ -26,24 +26,6 @@ const Suggestions = () => {
       navigate("/friends/requests")
     }
   }
-
-  const cancelInvitationHandler = async (userId) => { // by user id
-    const response = await usersService.cancelInvitation(userId, token, true)
-    if(response) {
-
-    }
-  }
-
-  async function fetchSuggestions() {
-    if(suggestionsList.length > 0) return;
-    const suggestionsResponse = await usersService.fetchPaginedSuggestions(token)
-    if(suggestionsResponse) 
-      setSuggestionsList(suggestionsResponse.data, true)
-  }
-
-  useEffect(() => {
-    fetchSuggestions()
-  }, [])
 
   return <>
     {

@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom"
 
 const FriendsList = () => {
   const {friendsList, addFriendsList, setFriendsList} = useFriends()
-  const {user, token} = useAuth()
+  const {token} = useAuth()
   const [seeMoreUrl, setMoreUrl] = useState("")
   
   const seeMoreHandler = async () => {
@@ -20,16 +20,7 @@ const FriendsList = () => {
       addFriendsList(more.data)
       setMoreUrl(seeMoreUrl = more.seeMoreUrl)
     }
-  } 
-
-  useEffect(() => {
-    async function loadFriends () {
-      const response = await usersService.fetchPaginedFriends(user.id, token)
-      setFriendsList(response.data)
-      setMoreUrl(response.seeMoreUrl)
-    }
-    loadFriends()
-  }, [])
+  }
 
   return <div>
     <div className="text-lg font-bold">All your friends</div>
