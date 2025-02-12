@@ -116,7 +116,8 @@ const friendsReducer = (state, action) => {
       ...state,
       sentRequests: [
         ...state.sentRequests.filter(req => req.receiver.id != action.payload.id)
-      ]
+      ],
+      suggestionsList: [action.payload, ...state.suggestionsList]
     }
   }
 
@@ -162,7 +163,7 @@ const FriendsContextProvider = ({children}) => {
   }
 
   function cancelRequest(user) {
-    if(request) dispatch({type: "CANCEL_REQUEST", payload: user})
+    if(user) dispatch({type: "CANCEL_REQUEST", payload: user})
   }
 
   return <FriendsContext.Provider value={{
