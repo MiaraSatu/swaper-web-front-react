@@ -1,4 +1,4 @@
-import { formatDistance } from "date-fns"
+import { format, formatDistance, isToday, isYesterday } from "date-fns"
 import { useEffect, useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import { apiImageUrl } from "../../services/api"
@@ -13,8 +13,20 @@ const DiscussionItem = ({discussion}) => {
 
   const [now, setNow] = useState(new Date())
 
-  const sentAt = Date.parse(discussion.createdAt)
   const subject = appService.getDiscussionSubject(discussion, user)
+
+  const formatDate = (stringDate) => {
+    const date = Date.parse(stringDate)
+    if(isToday(date)) {
+      return format(date, "HH:mm")
+    }
+    if(isYesterday(date)) {
+      return `Yest ${format(date, "HH:mm")}`
+    }
+    else {
+      return format(date, "LLL d, HH:mm")
+    }
+  }
 
   useEffect(() => {
     const timeUpdateInterval = setInterval(() => setNow(new Date()), 10000)
@@ -23,31 +35,38 @@ const DiscussionItem = ({discussion}) => {
 
   return <div 
       key={discussion.id+discussion.type}
-      className={"discussion-item flex content-between my-2 p-2 rounded cursor-pointer hover:bg-gray-50 hover:shadow" }
+      className={"discussion-item flex my-2 p-2 rounded cursor-pointer hover:bg-gray-50 hover:shadow" }
       onClick={() => setCurrentDiscussion(subject)}
     >
-      <div className="flex w-3/5">
+      <div className="w-1/5">
         <img 
-          className="w-10 h-10 mr-2 object-cover"
-          src={subject.imageUrl ? apiImageUrl(subject.imageUrl) : avatar} 
-          alt={subject.name} 
+          className="object-cover"
+          src={subject.imageUrl ? apiImageUrl(subject.imageUrl) : avatar} alt={subject.name} 
         />
-        <div className="w-full text-ellipsis overflow-hidden text-nowrap">
-          <div className={"text-gray-900"+((discussion.unreadCount > 0) ? " font-bold" : "")}>{subject.name}</div>
-          <div className="text-xs text-gray-600">
-            {(discussion.sender.id == user.id ? "You: " : "") + discussion.content}
+      </div>
+      <div className="w-4/5 pl-1">
+        <div className="flex items-center justify-between">
+          <div className={"overflow-hidden text-ellipsis text-md box-border" + (discussion.unreadCount > 0 ? " font-semibold text-red-700" : "")}>
+            {subject.name}
+          </div>
+          <div className="text-xs text-nowrap text-gray-400 ml-1">
+            {formatDate(discussion.createdAt)}
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="overflow-hidden text-ellipsis text-nowrap text-sm text-gray-500">
+            {discussion.content}
+          </div>
+          <div>
+            {discussion.unreadCount > 0
+              ? <div className="flex items-center justify-center ml-auto w-5 h-5 text-xs bg-gray-900 text-white rounded-full">
+                  {discussion.unreadCount}
+                </div>
+              : <></>
+            }
           </div>
         </div>
       </div>
-      <div className="w-2/5 text-xs text-right text-gray-500 font-semibold">
-        {formatDistance(sentAt, now, {addSuffix: false})}
-        { discussion.unreadCount > 0 
-          ? <div className="flex items-center justify-center ml-auto w-5 h-5 bg-gray-900 text-white rounded-full">
-              {discussion.unreadCount}
-            </div>
-          : <></>
-        }
-        </div>
   </div>
 }
 
