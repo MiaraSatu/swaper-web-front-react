@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from "react"
 
-const FriendsContext = createContext({
+const initialState = {
   friendsList: [],
   receivedRequests: [],
   sentRequests: [],
@@ -13,7 +13,9 @@ const FriendsContext = createContext({
   acceptRequest: () => {},
   refuseRequest: () => {},
   cancelRequest: () => {}
-})
+}
+
+const FriendsContext = createContext(initialState)
 
 const friendsReducer = (state, action) => {
   // FRIENDS_LIST
@@ -71,12 +73,10 @@ const friendsReducer = (state, action) => {
   if(action.type == "NEW_INVITATION") {
     return {
       ...state,
-      suggestionsList: [...state.suggestionsList.map(sug => {
-        if(sug.id == action.payload.receiver.id) {
-          return {...action.payload.receiver}
-        }
-        return sug
-      })]
+      suggestionsList: [...state.suggestionsList.filter(sug => {
+        return action.payload.receiver.id != sug.id
+      })],
+      sentRequests: [action.payload, ...state.sentRequests]
     }
   }
   if(action.type == "ACCEPT_REQUEST") {
@@ -115,14 +115,7 @@ const friendsReducer = (state, action) => {
     return {
       ...state,
       sentRequests: [
-        ...state.sentRequests.map(req => {
-          if(req.receiver.id == action.payload.id)
-            return {
-              ...req,
-              receiver: {...action.payload}
-            }
-          return req
-        })
+        ...state.sentRequests.filter(req => req.receiver.id != action.payload.id)
       ]
     }
   }
@@ -131,20 +124,7 @@ const friendsReducer = (state, action) => {
 }
 
 const FriendsContextProvider = ({children}) => {
-  const [state, dispatch] = useReducer(friendsReducer, {
-    friendsList: [],
-    receivedRequests: [],
-    sentRequests: [],
-    suggestionsList: [],
-    addFriendsList: () => {},
-    setFriendsList: () => {},
-    setRequests: () => {},
-    setSuggestionsList: () => {},
-    newInvitation: () => {},
-    acceptRequest: () => {},
-    refuseRequest: () => {},
-    cancelRequest: () => {}
-  })
+  const [state, dispatch] = useReducer(friendsReducer, initialState)
 
   function addFriendsList(list) {
     dispatch({type: "ADD_FRIENDS_LIST", payload: list})
@@ -181,8 +161,8 @@ const FriendsContextProvider = ({children}) => {
     if(request) dispatch({type: "REFUSE_REQUEST", payload: request})
   }
 
-  function cancelRequest(request) {
-    if(request) dispatch({type: "CANCEL_REQUEST", payload: request})
+  function cancelRequest(user) {
+    if(request) dispatch({type: "CANCEL_REQUEST", payload: user})
   }
 
   return <FriendsContext.Provider value={{

@@ -5,6 +5,8 @@ import Friends from "./components/Friends";
 import Received from "./components/friends/Received";
 import Sent from "./components/friends/Sent";
 import Home from "./components/Home";
+import Suggestions from "./components/friends/Suggestions";
+import Invitations from "./components/friends/Invitations";
 
 export const router = createBrowserRouter([
   {
@@ -12,23 +14,34 @@ export const router = createBrowserRouter([
     element: <Home />,
     children: [
       {
-        path: "/:discussion_id?",
+        path: ":discussion_id?",
         element: 
         <Discussions />
       },
       {
-        path: "friends/",
+        path: "friends",
         element: <Friends />,
         children: [
-          {index: true, element: <Navigate to="received/" replace />},
+          {index: true, element: <Navigate to="suggestions" replace />},
           {
-            path: "received/",
-            element: <Received />
+            path: "suggestions",
+            element: <Suggestions />
           },
           {
-            path: "sent/",
-            element: <Sent />
-          }
+            path: "requests",
+            element: <Invitations />,
+            children: [
+              {index: true, element: <Navigate to="received" replace />},
+              {
+                path: "received",
+                element: <Received />
+              },
+              {
+                path: "sent",
+                element: <Sent />
+              }
+            ]
+          },
         ]
       },
       {

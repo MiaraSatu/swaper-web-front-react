@@ -1,6 +1,10 @@
+import { useState } from "react"
 import avatar from "../../assets/User_Avatar_2.png"
+import usersService from "../../services/usersService"
+import { useAuth } from "../../hooks/useAuth"
 
-const SuggestionItem = ({user, sendInvitation}) => {
+const SuggestionItem = ({user, openInvitationModal, cancelInvitationHandler}) => {
+  const {token} = useAuth()
 
   return <>
     <div className="w-64 p-3 bg-white shadow-sm mx-2 hover:shadow-md">
@@ -18,7 +22,7 @@ const SuggestionItem = ({user, sendInvitation}) => {
         </div>
         { user.friendStatus == "none"
           ? <button 
-              onClick={() => sendInvitation(user)}
+              onClick={() => openInvitationModal(user)}
               className="w-full px-3 py-1 mt-2 bg-gray-50 rounded-md text-gray-900 border-2 border-gray-900"
             >
               Invite as friends
@@ -27,7 +31,7 @@ const SuggestionItem = ({user, sendInvitation}) => {
         }
         { user.friendStatus == "sent"
           ? <button 
-              onClick={() => sendInvitation(user)}
+              onClick={cancelInvitationHandler}
               className="w-full px-3 py-1 mt-2 bg-gray-50 rounded-md text-red-700 border-2 border-red-700"
             >
               Cancel
@@ -36,7 +40,7 @@ const SuggestionItem = ({user, sendInvitation}) => {
         }
         { user.friendStatus == "friend"
           ? <button 
-              onClick={() => sendInvitation(user)}
+              onClick={() => {}}
               className="w-full px-3 py-1 mt-2 bg-gray-50 rounded-md text-yellow-700 border-2 border-yellow-700"
             >
               Remove

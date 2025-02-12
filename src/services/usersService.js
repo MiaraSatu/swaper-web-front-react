@@ -90,9 +90,10 @@ async function refuseInvitation(invitationId, token) {
   return response
 }
 
-async function cancelInvitation(invitationId, token) {
+async function cancelInvitation(id, token, isUserId = false) {
   let response = null
-  await axios.get(API_URL+"/invitation/"+invitationId+"/cancel", {headers: {Authorization: "bearer "+token}})
+  const url = isUserId ? `${API_URL}/user/${id}/invitation/cancel` : `${API_URL}/invitation/${id}/cancel`
+  await axios.get(url, {headers: {Authorization: "bearer "+token}})
   .then(({data}) => {
     response = data
   })

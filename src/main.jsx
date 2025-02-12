@@ -9,11 +9,13 @@ import { faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart, faPenc
   faSearch,
   faPaperPlane,
   faCheckDouble,
-  faArrowTurnUp} from '@fortawesome/free-solid-svg-icons'
+  faArrowTurnUp,
+  faCaretDown,
+  faCaretUp} from '@fortawesome/free-solid-svg-icons'
 
 library.add(faTwitter, faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart,
   faPencilSquare, faClose, faCheck, faX, faPlus, faSearch, faPaperPlane, faCheckDouble, faArrowTurnUp,
-  faPlus
+  faPlus, faCaretDown, faCaretUp
 )
 
 createRoot(document.getElementById('root')).render(
