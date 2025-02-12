@@ -12,8 +12,6 @@ const DiscussionItem = ({discussion}) => {
   const {user} = useAuth()
   const {setCurrentDiscussion} = useDiscussions()
 
-  const [now, setNow] = useState(new Date())
-
   const subject = appService.getDiscussionSubject(discussion, user)
 
   const formatDate = (stringDate) => {
@@ -28,11 +26,6 @@ const DiscussionItem = ({discussion}) => {
       return format(date, "LLL d, HH:mm")
     }
   }
-
-  useEffect(() => {
-    const timeUpdateInterval = setInterval(() => setNow(new Date()), 10000)
-    return () => clearInterval(timeUpdateInterval)
-  }, [])
 
   return <div 
       key={discussion.id+discussion.type}

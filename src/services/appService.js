@@ -22,7 +22,6 @@ function getMessageStatus(message) {
   // [sent, ignored, seen]
   if(message.seen) return "seen"
   if(message.checked) return "ignored"
-  console.log("passed here, message status")
   return "sent"
 }
 

@@ -8,7 +8,7 @@ import { useEffect } from "react"
 
 const LeftBar = () => {
   const {logout, user, token} = useAuth()
-  const {unreadMessageCount, uncheckedMessageCount, setUnreadMessageCount, setUncheckedMessageCount} = useHome()
+  const {unreadMessageCount, setUnreadMessageCount, setUncheckedMessageCount} = useHome()
 
   useEffect(() => {
     const checkDataInterval = setInterval(async () => {
@@ -31,7 +31,7 @@ const LeftBar = () => {
           <div className="icon">
             <FontAwesomeIcon icon="fa-solid fa-envelope" />
           </div>
-          Messages ({uncheckedMessageCount})
+          Messages
           {
             unreadMessageCount > 0
             ? <div className="w-6 h-6 flex justify-center items-center ml-auto text-xs rounded-full text-gray-900 bg-gray-50">
