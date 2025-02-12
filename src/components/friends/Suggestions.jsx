@@ -30,7 +30,7 @@ const Suggestions = () => {
   const cancelInvitationHandler = async (userId) => { // by user id
     const response = await usersService.cancelInvitation(userId, token, true)
     if(response) {
-      
+
     }
   }
 
@@ -62,7 +62,6 @@ const Suggestions = () => {
         key={user.id} 
         user={user} 
         openInvitationModal={openModal}
-        cancelInvitationHandler={cancelInvitationHandler} 
       />)}
     </div>
   </>

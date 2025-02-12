@@ -4,14 +4,12 @@ import InvitationItem from "./InvitationItem"
 
 const Sent = () => {
   const {sentRequests} = useFriends()
-  const {openModal} = useOutletContext()
 
   return <>
     {sentRequests.map(request => <InvitationItem 
       key={request.id}
       invitation={request}
       subjectStatus="receiver"
-      openModal={openModal}
     />)}
   </>
 

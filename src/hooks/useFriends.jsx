@@ -83,12 +83,7 @@ const friendsReducer = (state, action) => {
     return {
       ...state,
       receivedRequests: [
-        ...state.receivedRequests.map((req) => {
-          if(req.id == action.payload.id) {
-            return {...action.payload}
-          }
-          return req
-        })
+        ...state.receivedRequests.filter((req) => req.id != action.payload.id)
       ],
       friendsList: [...state.friendsList, {...action.payload.sender}]
     }
@@ -97,18 +92,9 @@ const friendsReducer = (state, action) => {
     return {
       ...state,
       receivedRequests: [
-        ...state.receivedRequests.map(req => {
-          if(req.sender.id == action.payload.id) {
-            return {
-              ...req,
-              sender: {...action.payload}
-            }
-          }
-          return req
-        }) 
+        ...state.receivedRequests.filter(req => req.sender.id != action.payload.id) 
       ],
-      receivedRequests: [...state.receivedRequests.filter((request) => request.id != action.payload.id)],
-      suggestionsList: [...state.suggestionsList, {...action.payload.sender}]
+      suggestionsList: [...state.suggestionsList, {...action.payload}]
     }
   }
   if(action.type == "CANCEL_REQUEST") {
@@ -158,8 +144,8 @@ const FriendsContextProvider = ({children}) => {
     if(request) dispatch({type: "ACCEPT_REQUEST", payload: request})
   }
 
-  function refuseRequest(request) {
-    if(request) dispatch({type: "REFUSE_REQUEST", payload: request})
+  function refuseRequest(user) {
+    if(user) dispatch({type: "REFUSE_REQUEST", payload: user})
   }
 
   function cancelRequest(user) {
