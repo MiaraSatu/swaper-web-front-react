@@ -23,22 +23,24 @@ const DiscussionItem = ({discussion}) => {
 
   return <div 
       key={discussion.id+discussion.type}
-      className={"discussion-item flex content-between my-2 p-2 rounded cursor-pointer hover:bg-gray-50 hover:shadow"+ (discussion.unreadCount == 0 ? " seen" : " new") }
+      className={"discussion-item flex content-between my-2 p-2 rounded cursor-pointer hover:bg-gray-50 hover:shadow" }
       onClick={() => setCurrentDiscussion(subject)}
     >
-      <div className="flex w-4/5">
+      <div className="flex w-3/5">
         <img 
-          className="w-8 h-8 mr-2 object-cover"
+          className="w-10 h-10 mr-2 object-cover"
           src={subject.imageUrl ? apiImageUrl(subject.imageUrl) : avatar} 
           alt={subject.name} 
         />
         <div className="w-full text-ellipsis overflow-hidden text-nowrap">
-          <div className="text-gray-900">{subject.name}</div>
-          <div className="text-xs text-gray-600">{discussion.content}</div>
+          <div className={"text-gray-900"+((discussion.unreadCount > 0) ? " font-bold" : "")}>{subject.name}</div>
+          <div className="text-xs text-gray-600">
+            {(discussion.sender.id == user.id ? "You: " : "") + discussion.content}
+          </div>
         </div>
       </div>
-      <div className="w-1/5 text-xs text-right text-gray-500 font-semibold">
-        {formatDistance(sentAt, now)}
+      <div className="w-2/5 text-xs text-right text-gray-500 font-semibold">
+        {formatDistance(sentAt, now, {addSuffix: false})}
         { discussion.unreadCount > 0 
           ? <div className="flex items-center justify-center ml-auto w-5 h-5 bg-gray-900 text-white rounded-full">
               {discussion.unreadCount}

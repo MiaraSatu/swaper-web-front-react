@@ -9,7 +9,7 @@ const Discussions = () => {
       <div className="w-3/4 bg-gray-50">
         <Discussion />
       </div>
-      <div id="discussions" className="w-1/4 py-4 px-8">
+      <div id="discussions" className="w-1/4 py-4 pr-8 pl-4">
         <RightDiscussions />
       </div>
     </div>

@@ -31,7 +31,7 @@ const Discussion = () => {
 
   const submitMessageHandler = async (e) => {
     e.preventDefault()
-    if(currentDiscussion) {
+    if(currentDiscussion && message != "") {
       const messageResponse = await messagesService.sendMessage({content: message}, "sample", currentDiscussion.id, token, parent ? parent.id : null)
       if(messageResponse) {
         newMessage(messageResponse)
