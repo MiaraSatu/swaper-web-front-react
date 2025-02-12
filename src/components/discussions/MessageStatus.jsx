@@ -11,7 +11,7 @@ const MessageStatus = ({message}) => {
       ? 
         <>{status == "sent"
             ? <FontAwesomeIcon icon="fa-solid fa-check" className="text-sm text-gray-600" />
-            : <FontAwesomeIcon icon="fa-solid fa-check-double" className={(status == "ignored" ? "text-gray-600": "text-blue-400")} />
+            : <FontAwesomeIcon icon="fa-solid fa-check-double" className={(status == "ignored" ? "text-gray-300": "text-blue-700")} />
           }
         </>
       : <></>
