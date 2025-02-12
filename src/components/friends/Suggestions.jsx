@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useFriends } from "../../hooks/useFriends"
 import SuggestionItem from "./SuggestionItem"
-import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
 import { useNavigate } from "react-router-dom"
 import InvitationModal from "./InvitationModal"

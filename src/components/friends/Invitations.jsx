@@ -1,16 +1,7 @@
-import { useEffect, useState } from "react"
 import { useFriends } from "../../hooks/useFriends"
 import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
-import SuggestionItem from "./SuggestionItem"
-import InvitationModal from "./InvitationModal"
-import InvitationItem from "./InvitationItem"
-import { apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
-import Suggestions from "./Suggestions"
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
-import Received from "./Received"
-import Sent from "./Sent"
 
 const Invitations = () => {
   const {token} = useAuth()

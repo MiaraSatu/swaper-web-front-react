@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom"
-import { FriendsContextProvider, useFriends} from "../hooks/useFriends"
+import { useFriends} from "../hooks/useFriends"
 import FriendsList from "./friends/FriendsList"
-import Invitations from "./friends/Invitations"
 import { useEffect, useState } from "react"
 import { useAuth } from "../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"

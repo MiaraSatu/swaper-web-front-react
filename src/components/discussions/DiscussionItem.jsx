@@ -1,10 +1,8 @@
-import { format, formatDistance, isToday, isYesterday } from "date-fns"
-import { useEffect, useState } from "react"
+import { format, isToday, isYesterday } from "date-fns"
 import { useAuth } from "../../hooks/useAuth"
 import { apiImageUrl } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import useDiscussions from "../../hooks/useDiscussions"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { appService } from "../../services/appService"
 import MessageStatus from "./MessageStatus"
 

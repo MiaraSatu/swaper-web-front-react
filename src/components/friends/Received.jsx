@@ -1,6 +1,5 @@
 import { useFriends } from "../../hooks/useFriends"
 import InvitationItem from "./InvitationItem"
-import { useOutletContext } from "react-router-dom"
 
 const Received = () => {
   const {receivedRequests} = useFriends()

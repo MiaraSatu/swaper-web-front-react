@@ -1,4 +1,3 @@
-import { useOutletContext } from "react-router-dom"
 import { useFriends } from "../../hooks/useFriends"
 import InvitationItem from "./InvitationItem"
 

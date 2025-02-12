@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react"
 import { useFriends } from "../../hooks/useFriends"
-import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
 import { apiFetch, apiImageUrl } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 
 const FriendsList = () => {
-  const {friendsList, addFriendsList, setFriendsList} = useFriends()
+  const {friendsList, addFriendsList} = useFriends()
   const {token} = useAuth()
   const [seeMoreUrl, setMoreUrl] = useState("")
   

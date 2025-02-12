@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import useDiscussions from "../../hooks/useDiscussions"
-import { apiFetch, apiImageUrl, BASE_URL } from "../../services/api"
+import { apiFetch, apiImageUrl} from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { messagesService } from "../../services/messagesService"

@@ -1,9 +1,6 @@
 import { apiImageUrl } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useAuth } from "../../hooks/useAuth"
-import { useFriends } from "../../hooks/useFriends"
-import usersService from "../../services/usersService"
 import { useOutletContext } from "react-router-dom"
 
 

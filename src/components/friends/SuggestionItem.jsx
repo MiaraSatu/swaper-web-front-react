@@ -1,7 +1,4 @@
-import { useState } from "react"
 import avatar from "../../assets/User_Avatar_2.png"
-import usersService from "../../services/usersService"
-import { useAuth } from "../../hooks/useAuth"
 
 const SuggestionItem = ({user, openInvitationModal}) => {
 
