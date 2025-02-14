@@ -12,12 +12,6 @@ const Friends = () => {
   const [loading, setLoading] = useState(false)
 
   async function initializeFriendsData() {
-    const fetchSuggestions = async () => {
-      const suggestionsResponse = await usersService.fetchPaginedSuggestions(token)
-      if(suggestionsResponse) 
-        setSuggestionsList(suggestionsResponse.data, true)
-    }
-
     const fetchRequests = async () => {
       const receivedResponse = await usersService.fetchPaginedInvitations("received", token)
       const sentResponse = await usersService.fetchPaginedInvitations("sent", token)
@@ -28,7 +22,7 @@ const Friends = () => {
     }
 
     setLoading(true)
-    await fetchSuggestions()
+    // await fetchSuggestions()
     await fetchRequests()
     setLoading(false)
   }

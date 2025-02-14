@@ -1,16 +1,20 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useFriends } from "../../hooks/useFriends"
 import SuggestionItem from "./SuggestionItem"
 import { useAuth } from "../../hooks/useAuth"
 import { useNavigate } from "react-router-dom"
 import InvitationModal from "./InvitationModal"
+import usersService from "../../services/usersService"
+import { apiFetch } from "../../services/api"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const Suggestions = () => {
-  const {suggestionsList} = useFriends()
-  const {token} = useAuth()
   const navigate = useNavigate()
+  const {suggestionsList, setSuggestionsList} = useFriends()
+  const {token} = useAuth()
 
   const [currentReceiver, setCurrentReceiver] = useState(null)
+  const [seeMoreUrl, setSeeMoreUrl] = useState(null)
 
   const openModal = (receiver) => {
     setCurrentReceiver(receiver)
@@ -25,6 +29,28 @@ const Suggestions = () => {
       navigate("/friends/requests")
     }
   }
+
+  const seeMoreHandler = async () => {
+    const more = await apiFetch(seeMoreUrl, token)
+    if(more) {
+      setSuggestionsList(more.data)
+      setSeeMoreUrl(more.seeMoreUrl)
+    }
+  }
+
+  const fetchSuggestions = async () => {
+    console.log("Fetch lanced [Suggestions]")
+    const suggestionsResponse = await usersService.fetchPaginedSuggestions(token)
+    if(suggestionsResponse) {
+      setSuggestionsList(suggestionsResponse.data, true)
+      setSeeMoreUrl(suggestionsResponse.seeMoreUrl)
+    }
+  }
+
+  useEffect(() => {
+    if(suggestionsList.length > 0) return;
+    fetchSuggestions()
+  }, [])
 
   return <>
     {
@@ -44,6 +70,14 @@ const Suggestions = () => {
         user={user} 
         openInvitationModal={openModal}
       />)}
+      <button 
+        className="w-64 flex justify-center items-center p-3 text-gray-800 bg-gray-200 shadow-sm mx-2 my-4 hover:shadow-md disabled:text-gray-500"
+          onClick={seeMoreHandler}
+          disabled={seeMoreUrl == null}
+        >
+          <FontAwesomeIcon icon="fa-solid fa-spinner" className="mr-2" />
+          Load more
+        </button>
     </div>
   </>
 }
