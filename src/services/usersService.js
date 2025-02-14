@@ -103,8 +103,20 @@ async function cancelInvitation(id, token, isUserId = false) {
   return response
 }
 
+async function searchFriend(keyword, token) {
+  let response = null
+  await axios.get(`${API_URL}/users/discussers/search?kw=${keyword}`, {headers: {Authorization: `bearer ${token}`}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error by searching user", error)
+  })
+  return response
+}
+
 const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions, inviteFriend,
-  acceptInvitation, refuseInvitation, cancelInvitation
+  acceptInvitation, refuseInvitation, cancelInvitation, searchFriend
 }
 
 export default usersService

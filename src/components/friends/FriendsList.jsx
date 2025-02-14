@@ -4,16 +4,35 @@ import { apiFetch, apiImageUrl } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import usersService from "../../services/usersService"
 
 
 const FriendsList = () => {
-  const {friendsList, addFriendsList} = useFriends()
-  const {token} = useAuth()
+  const {friendsList, addFriendsList, setFriendsList} = useFriends()
+  const {token, user} = useAuth()
   const [seeMoreUrl, setMoreUrl] = useState("")
+  const [searchResponse, setSearchResponse] = useState(null)
+
+  const searchResponseHandler = (response) => {
+    if(!response) {
+      setSearchResponse(null);
+      return;
+    }
+    setSearchResponse(response)
+  }
+
+  const fetchFriends = async () => {
+    console.log("Fetch lanced [friendsList]")
+    const response = await usersService.fetchPaginedFriends(user.id, token)
+    if(response) {
+      setFriendsList(response.data);
+      setMoreUrl(response.seeMoreUrl)
+    }
+  }
   
   const seeMoreHandler = async () => {
-    console.log(seeMoreUrl)
+    console.log("seeMoreUrl value is", seeMoreUrl)
     const more = await apiFetch(seeMoreUrl, token)
     if(more) {
       addFriendsList(more.data)
@@ -21,11 +40,24 @@ const FriendsList = () => {
     }
   }
 
-  return <div>
-    <div className="text-lg font-bold">All your friends</div>
-    <div className="mt-4">
-      {friendsList.map((friend) => <FriendItem key={friend.id} friend={friend} />)}
-      <button onClick={seeMoreHandler}>
+  useEffect(() => {
+    if(friendsList.length > 0) return ;
+    fetchFriends()
+  }, [])
+
+  return <div className="w-full">
+    <div className="w-full text-lg font-bold">All your friends</div>
+    <SearchFriendForm onSearch={searchResponseHandler} />
+    <div className="w-full mt-4">
+      {searchResponse 
+        ? searchResponse.map(result => <FriendItem key={result.id} friend={result} />)
+        : friendsList.map((friend) => <FriendItem key={friend.id} friend={friend} />)
+      }
+      <button 
+        className="w-full py-1 border-2 border-gray-900 rounded-md hover:bg-gray-200 hover:shadow-md disabled:text-gray-600 disabled:hover:bg-white disabled:border-gray-400"
+        onClick={seeMoreHandler} 
+        disabled={seeMoreUrl == null}
+      >
         See more
       </button>
     </div>
@@ -52,6 +84,45 @@ const FriendItem = ({friend}) => {
         </button>
       </div>
     </div>
+  </div>
+}
+
+const SearchFriendForm = ({onSearch}) => {
+  const {token} = useAuth()
+  const [keyword, setKeyword] = useState("")
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+  }
+
+  const changeKeywordHandler = async (e) => {
+    setKeyword(e.target.value)
+    if(e.target.value == "") {
+      onSearch(null)
+      return;
+    }
+    const response = await usersService.searchFriend(e.target.value, token)
+    onSearch(response)
+  }
+
+  return <div className="w-full">
+    <form 
+      className="w-full"
+      onSubmit={submitHandler}
+    >
+      <div className="w-full flex px-4 py-2 rounded-xl shadow-sm bg-gray-200">
+        <input 
+          className="grow border-none outline-none bg-transparent"
+          type="text" 
+          placeholder="Search a friend"
+          value={keyword} 
+          onChange={changeKeywordHandler} 
+        />
+        <button type="submit">
+          <FontAwesomeIcon icon="fa-solid fa-search" />
+        </button>
+      </div>
+    </form>
   </div>
 }
 

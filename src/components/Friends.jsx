@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import usersService from "../services/usersService"
 
 const Friends = () => {
-  const {user, token} = useAuth()
+  const {token} = useAuth()
   const {setSuggestionsList, setRequests, setFriendsList} = useFriends()
   const [loading, setLoading] = useState(false)
 
@@ -27,14 +27,9 @@ const Friends = () => {
         setRequests("sent", sentResponse.data, true)
     }
 
-    const fetchFriends = async () => {
-      const response = await usersService.fetchPaginedFriends(user.id, token)
-      setFriendsList(response.data)
-    }
     setLoading(true)
     await fetchSuggestions()
     await fetchRequests()
-    await fetchFriends()
     setLoading(false)
   }
 
