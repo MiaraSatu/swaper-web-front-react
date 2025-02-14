@@ -7,29 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import usersService from "../services/usersService"
 
 const Friends = () => {
-  const {token} = useAuth()
-  const {setSuggestionsList, setRequests, setFriendsList} = useFriends()
   const [loading, setLoading] = useState(false)
-
-  async function initializeFriendsData() {
-    const fetchRequests = async () => {
-      const receivedResponse = await usersService.fetchPaginedInvitations("received", token)
-      const sentResponse = await usersService.fetchPaginedInvitations("sent", token)
-      if(receivedResponse)
-        setRequests("received", receivedResponse.data, true)
-      if(sentResponse)
-        setRequests("sent", sentResponse.data, true)
-    }
-
-    setLoading(true)
-    // await fetchSuggestions()
-    await fetchRequests()
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    initializeFriendsData()
-  }, [])
 
   return <div className="w-full h-full flex">
     {loading

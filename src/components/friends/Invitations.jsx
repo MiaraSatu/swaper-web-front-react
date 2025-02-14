@@ -2,10 +2,11 @@ import { useFriends } from "../../hooks/useFriends"
 import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
+import { useEffect } from "react"
 
 const Invitations = () => {
   const {token} = useAuth()
-  const {acceptRequest, refuseRequest, cancelRequest} = useFriends()
+  const {receivedRequests, sentRequests, acceptRequest, refuseRequest, cancelRequest, setRequests} = useFriends()
 
   const navigate = useNavigate()
 
@@ -35,6 +36,21 @@ const Invitations = () => {
       navigate("/friends/suggestions")
     }
   }
+
+  const fetchRequests = async () => {
+    console.log("Fetch lanced [Invitations]")
+    const receivedResponse = await usersService.fetchPaginedInvitations("received", token)
+    const sentResponse = await usersService.fetchPaginedInvitations("sent", token)
+    if(receivedResponse)
+      setRequests("received", receivedResponse.data, true)
+    if(sentResponse)
+      setRequests("sent", sentResponse.data, true)
+  }
+
+  useEffect(() => {
+    if(receivedRequests.length != 0 || sentRequests.length != 0) return;
+    fetchRequests()
+  }, [])
 
   return <div className="w-full">
     <div className="text-xl font-bold">
