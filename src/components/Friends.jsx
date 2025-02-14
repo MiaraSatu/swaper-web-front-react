@@ -1,10 +1,7 @@
 import { Outlet } from "react-router-dom"
-import { useFriends} from "../hooks/useFriends"
 import FriendsList from "./friends/FriendsList"
-import { useEffect, useState } from "react"
-import { useAuth } from "../hooks/useAuth"
+import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import usersService from "../services/usersService"
 
 const Friends = () => {
   const [loading, setLoading] = useState(false)

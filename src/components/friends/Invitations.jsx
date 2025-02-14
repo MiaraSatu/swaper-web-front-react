@@ -1,7 +1,7 @@
 import { useFriends } from "../../hooks/useFriends"
 import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
-import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 
 const Invitations = () => {
