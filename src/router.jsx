@@ -9,6 +9,8 @@ import Suggestions from "./components/friends/Suggestions";
 import Invitations from "./components/friends/Invitations";
 import { DiscussionContextProvider } from "./hooks/useDiscussions";
 import { FriendsContextProvider } from "./hooks/useFriends";
+import Search from "./components/friends/Search";
+import { SearchContextProvider } from "./hooks/useSearch";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +49,12 @@ export const router = createBrowserRouter([
               }
             ]
           },
+          {
+            path: "search",
+            element: <SearchContextProvider>
+              <Search />
+            </SearchContextProvider>
+          }
         ]
       },
       {

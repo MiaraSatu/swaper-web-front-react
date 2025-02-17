@@ -54,6 +54,18 @@ async function fetchPaginedSuggestions(token) {
   return response
 }
 
+async function getReceivedInvitation(senderId, token) {
+  let response = null
+  await axios.get(`${API_URL}/invitation/sender/${senderId}`, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when fetching request sent by "+senderId, error)
+  })
+  return response
+}
+
 async function inviteFriend(userId, message, token) {
   let response = null
   await axios.post(API_URL+"/user/"+userId+"/invite", message, {headers: {Authorization: "bearer "+token}})
@@ -115,8 +127,32 @@ async function searchFriend(keyword, token) {
   return response
 }
 
-const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions, inviteFriend,
-  acceptInvitation, refuseInvitation, cancelInvitation, searchFriend
+async function search(keyword, token) {
+  let response = null
+  await axios.get(`${API_URL}/users/search?kw=${keyword}`, {headers: {Authorization: `bearer ${token}`}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when searching user", error)
+  })
+  return response
+}
+
+async function removeFriend(friendId, token) {
+  let response = null
+  await axios.get(`${API_URL}/user/${friendId}/remove`, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when remove friend", error)
+  })
+  return response
+}
+
+const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions, getReceivedInvitation, inviteFriend,
+  acceptInvitation, refuseInvitation, cancelInvitation, searchFriend, search, removeFriend
 }
 
 export default usersService

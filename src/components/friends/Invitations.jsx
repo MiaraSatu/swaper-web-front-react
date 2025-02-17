@@ -3,6 +3,7 @@ import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import InvitationNav from "./InvitationNav"
 
 const Invitations = () => {
   const {token} = useAuth()
@@ -53,14 +54,7 @@ const Invitations = () => {
   }, [])
 
   return <div className="w-full">
-    <div className="text-xl font-bold">
-      <div className="w-full text-xl font-bold">
-        <select onChange={changeSelectHandler} defaultValue={"requests"}>
-          <option value="suggestions">Suggestions</option>
-          <option value="requests">Friend Request</option>
-        </select>
-      </div>
-    </div>
+    <InvitationNav />
     <ul className="flex cursor-pointer mt-3" id="friends-list-filter">
       <NavLink 
         to={{pathname:"/friends/requests/received"}}

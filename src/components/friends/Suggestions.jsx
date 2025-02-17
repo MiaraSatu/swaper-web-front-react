@@ -2,11 +2,12 @@ import { useEffect, useState } from "react"
 import { useFriends } from "../../hooks/useFriends"
 import SuggestionItem from "./SuggestionItem"
 import { useAuth } from "../../hooks/useAuth"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import InvitationModal from "./InvitationModal"
 import usersService from "../../services/usersService"
 import { apiFetch } from "../../services/api"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import InvitationNav from "./InvitationNav"
 
 const Suggestions = () => {
   const navigate = useNavigate()
@@ -25,9 +26,10 @@ const Suggestions = () => {
   }
 
   const changeSelectHandler = (e) => {
-    if(e.target.value == "requests") {
-      navigate("/friends/requests")
-    }
+    // if(e.target.value == "requests") {
+    //   navigate("/friends/requests")
+    // }
+    navigate(`../${e.target.value}`)
   }
 
   const seeMoreHandler = async () => {
@@ -58,12 +60,7 @@ const Suggestions = () => {
       ? <InvitationModal receiver={currentReceiver} onClose={closeModal} />
       : <></>
     }
-    <div className="w-full text-xl font-bold">
-      <select onChange={changeSelectHandler} defaultValue={"suggestions"}>
-        <option value="suggestions">Suggestions</option>
-        <option value="requests">Friend Request</option>
-      </select>
-    </div>
+    <InvitationNav />
     <div className="w-full flex flex-wrap mt-4">
       {suggestionsList.map(user => <SuggestionItem 
         key={user.id} 
