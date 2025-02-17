@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
 import { apiImageUrl } from "../../services/api"
@@ -7,6 +7,7 @@ import avatar from "../../assets/User_Avatar_2.png"
 import useSearch from "../../hooks/useSearch"
 import { useNavigate } from "react-router-dom"
 import InvitationModal from "./InvitationModal"
+import ReceivedInvitationModal from "./ReceivedInvitationModal"
 
 const Search = () => {
   const {token} = useAuth()
@@ -29,22 +30,10 @@ const Search = () => {
     }
   }
 
-  const submitHandler = (e) => {
-    e.preventDefault()
-  }
-
-  const handleAccept = async (sender) => {
-
-  }
-
-  const handleRefuse = async (sender) => {
-
-  }
-
   return <div className="">
     {currentReceiver ? <InvitationModal receiver={currentReceiver} onClose={() => setCurrentReceiver(null)} /> : <></> }
     {currentSender ? <ReceivedInvitationModal sender={currentSender} onClose={() => setCurrentSender(null)} /> : <></>}
-    <form onSubmit={submitHandler}>
+    <form onSubmit={(e) => e.preventDefault()}>
       <div className="flex px-4 py-2 bg-gray-200 rounded-lg shadow-lg">
         <button className="text-2xl">
           <FontAwesomeIcon icon="fa-solid fa-arrow-left" />
@@ -86,19 +75,16 @@ const Search = () => {
 const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal}) => {
   const navigate = useNavigate()
   const {token} = useAuth()
-  const [status, setStatus] = useState(user.friendStatus)
+  const {remove, cancel} = useSearch()
 
   const handleSend = async () => {
     onOpenSendRequestModal(user)
-    setStatus("sent")
   }
 
   const handleRemove = async () => {
     if(confirm(`Are you sure to remove ${user.name} (${user.email}) from your friend list?`)) {
       const response = await usersService.removeFriend(user.id, token)
-      if(response) {
-        setStatus("none")
-      }
+      if(response) remove(response);
     }
   }
 
@@ -108,21 +94,19 @@ const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal
 
   const handleAccept = () => {
     onOpenReceivedRequestModal(user)
-    setStatus("friend")
   }
 
   const handleRefuse = () => {
     onOpenReceivedRequestModal(user)
-    setStatus("none")
   }
 
   const handleCancel = async () => {
     const response = await usersService.cancelInvitation(user.id, token, true)
-    if(response) setStatus("none")
+    if(response) cancel(response)
   }
 
   return <>
-    {status == "friend"
+    {user.friendStatus == "friend"
       ? <div>
           <button className="w-32 px-2 py-1 rounded bg-gray-900 text-gray-50" onClick={handleRemove}>
             <FontAwesomeIcon icon="fa-solid fa-check" className="mr-2" />
@@ -135,7 +119,7 @@ const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal
         </div>
       : <></>
     }
-    {status == "received"
+    {user.friendStatus == "received"
       ? <div>
           <button className="w-32 px-2 py-1 rounded bg-green-800 text-gray-50 border-2 border-green-800" onClick={handleAccept}>
             <FontAwesomeIcon icon="fa-solid fa-check" className="mr-2" />
@@ -148,7 +132,7 @@ const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal
         </div>
       : <></>
     }
-    {status == "sent"
+    {user.friendStatus == "sent"
       ? <div>
           <button className="w-32 px-2 py-1 ml-2 rounded border-2 border-red-800 text-red-800" onClick={handleCancel}>
             <FontAwesomeIcon icon="fa-solid fa-x" className="mr-2" />
@@ -157,7 +141,7 @@ const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal
         </div>
       : <></>
     }
-    {status == "none"
+    {user.friendStatus == "none"
       ? <div>
           <button className="border-2 px-2 py-1 rounded border-blue-600 text-blue-600"
             onClick={handleSend}
@@ -169,74 +153,6 @@ const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal
       : <></>
     }
   </>
-}
-
-const ReceivedInvitationModal = ({sender, onClose, onAccept, onRefuse}) => {
-  const {token} = useAuth()
-  const [request, setRequest] = useState(null)
-
-  const handleAccept = async () => {
-    const acceptedRequest = await usersService.acceptInvitation(request.id, token)
-    if(acceptedRequest) onClose()
-  }
-
-  const handleRefuse = async () => {
-    const refusedUser = await usersService.refuseInvitation(request.id, token)
-    if(refusedUser) onClose()
-  }
-
-  async function fetchRequest() {
-    const requestResponse = await usersService.getReceivedInvitation(sender.id, token)
-    if(requestResponse) setRequest(requestResponse)
-  }
-
-  useEffect(() => {
-    fetchRequest()
-  }, [])
-
-  return <div 
-      className="w-screen h-screen absolute inset-0 z-10 flex justify-center items-center bg-black bg-opacity-80"
-      onClick={onClose}
-    >
-      {request
-        ? <div className="w-1/3 p-8 bg-gray-50 rounded-lg relative" onClick={(e) => e.stopPropagation() }>
-            <button 
-              className="absolute right-4 top-4 w-8 h-8 flex justify-center items-center rounded-full bg-gray-200"
-              onClick={onClose}
-              >
-              <FontAwesomeIcon icon="fa-solid fa-close" className="text-red-600 text-xl" />
-            </button>
-            <div>
-              Received invitation from
-            </div>
-            <div className="flex">
-              <div className="w-16 h-16 min-w-16 mr-4">
-                <img src={sender.imageUrl ? apiImageUrl(sender.imageUrl) : avatar} alt={sender.name} className="object-cover" />
-              </div>
-              <div>
-                <div className="font-bold">{sender.name}</div>
-                <div className="text-sm text-gray-600">{sender.email}</div>
-              </div>
-            </div>
-            <div>
-              {request.invitationText}
-            </div>
-            <div className="mt-4">
-              <button className="w-32 px-2 py-1 rounded bg-green-800 text-gray-50 border-2 border-green-800" onClick={handleAccept}>
-                <FontAwesomeIcon icon="fa-solid fa-check" className="mr-2" />
-                Accept
-              </button>
-              <button className="w-32 px-2 py-1 ml-2 rounded border-2 text-gray-50 bg-red-800 border-red-800" onClick={handleRefuse}>
-                <FontAwesomeIcon icon="fa-solid fa-x" className="mr-2" />
-                Refuse
-              </button>
-            </div>
-          </div>
-        : <div>
-            Request not found
-          </div>
-        }
-    </div>
 }
 
 export default Search

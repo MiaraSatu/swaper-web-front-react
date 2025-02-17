@@ -5,18 +5,25 @@ import { apiImageUrl } from "../../services/api"
 import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useFriends } from "../../hooks/useFriends"
+import useSearch from "../../hooks/useSearch"
 
 const InvitationModal = ({receiver, onClose}) => {
   const [message, setMessage] = useState()
   const [errorMessage, setErrorMessage] = useState(null)
   const {newInvitation} = useFriends()
   const {token} = useAuth()
+  const {results, send} = useSearch()
 
   const submitHandler = async (e) => {
     e.preventDefault()
     const response = await usersService.inviteFriend(receiver.id, message, token)
     if(response) {
-      newInvitation(response)
+      if(results && results.length > 0) { // si c'est une recherche
+        send(response.receiver)
+        console.log(results)
+      } else {
+        newInvitation(response) // se c'est une liste simple
+      }
       onClose()
     } else {
       setErrorMessage("Invitation not sent!")
