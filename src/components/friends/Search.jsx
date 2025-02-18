@@ -10,6 +10,7 @@ import InvitationModal from "./InvitationModal"
 import ReceivedInvitationModal from "./ReceivedInvitationModal"
 
 const Search = () => {
+  const navigate = useNavigate()
   const {token} = useAuth()
   const [keyword, setKeyword] = useState("")
   const {results, setResults} = useSearch()
@@ -35,7 +36,7 @@ const Search = () => {
     {currentSender ? <ReceivedInvitationModal sender={currentSender} onClose={() => setCurrentSender(null)} /> : <></>}
     <form onSubmit={(e) => e.preventDefault()}>
       <div className="flex px-4 py-2 bg-gray-200 rounded-lg shadow-lg">
-        <button className="text-2xl">
+        <button className="text-2xl" onClick={() => navigate(-1)}>
           <FontAwesomeIcon icon="fa-solid fa-arrow-left" />
         </button>
         <input 
