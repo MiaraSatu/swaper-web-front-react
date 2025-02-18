@@ -11,17 +11,30 @@ import { DiscussionContextProvider } from "./hooks/useDiscussions";
 import { FriendsContextProvider } from "./hooks/useFriends";
 import Search from "./components/friends/Search";
 import { SearchContextProvider } from "./hooks/useSearch";
+import Discussion from "./components/discussions/Discussion";
+import NewDiscussion from "./components/discussions/NewDiscussion";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
     children: [
+      {index: true, element: <Navigate to={"discussion"} />},
       {
-        path: ":discussion_id?",
+        path: "discussion",
         element: <DiscussionContextProvider>
           <Discussions />
-        </DiscussionContextProvider>
+        </DiscussionContextProvider>,
+        children: [
+          {
+            path: ":discussion_id?",
+            element: <Discussion />
+          },
+          {
+            path: "new",
+            element: <NewDiscussion />
+          }
+        ]
       },
       {
         path: "friends",

@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth"
 import useDiscussions from "../../hooks/useDiscussions"
 import DiscussionItem from "./DiscussionItem"
 import useHome from "../../hooks/useHome"
+import { Link } from "react-router-dom"
 
 const RightDiscussions = () => {
   const {token} = useAuth()
@@ -36,7 +37,9 @@ const RightDiscussions = () => {
   return <>
     <div className="flex justify-between items-center text-lg font-bold">
       <div>Messages</div>
-      <FontAwesomeIcon icon="fa-solid fa-pencil-square" className="text-gray-700 shadow-md" />
+      <Link to={{pathname: "new"}}>
+        <FontAwesomeIcon icon="fa-solid fa-pencil-square" className="text-gray-700 shadow-md" />
+      </Link>
     </div>
     <BestFriends />
     {/* search bar */}
