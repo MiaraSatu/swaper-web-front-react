@@ -13,6 +13,7 @@ import Search from "./components/friends/Search";
 import { SearchContextProvider } from "./hooks/useSearch";
 import Discussion from "./components/discussions/Discussion";
 import NewDiscussion from "./components/discussions/NewDiscussion";
+import NewBox from "./components/discussions/NewBox";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
           {
             path: "new",
             element: <NewDiscussion />
+          },
+          {
+            path: "new_box",
+            element: <NewBox />
           }
         ]
       },

@@ -17,7 +17,7 @@ import { faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart, faPenc
 
 library.add(faTwitter, faWarning, faPowerOff, faEnvelope, faUsers, faUserPlus, faHeart,
   faPencilSquare, faClose, faCheck, faX, faPlus, faSearch, faPaperPlane, faCheckDouble, faArrowTurnUp,
-  faPlus, faCaretDown, faCaretUp, faSpinner, faArrowLeft
+  faPlus, faCaretDown, faCaretUp, faSpinner, faArrowLeft, faUsers
 )
 
 createRoot(document.getElementById('root')).render(

@@ -49,4 +49,29 @@ async function sendMessage(message, type, receivedId, token, replyTo = null) {
   return response
 }
 
-export const messagesService = {fetchDiscussions, fetchDiscussion, fetchMessages, sendMessage}
+async function createBox(box, token) {
+  let response = null
+  await axios.post(`${API_URL}/box`, box, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when creating box", error)
+  })
+  return response
+} 
+
+async function addBoxMember(boxId, members, token) {
+  const membersArray = [...members.map(member => member.id)]
+  let response = null
+  await axios.post(`${API_URL}/box/${boxId}/users`, membersArray, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when adding member to a box", error.data.message)
+  })
+  return response;
+}
+
+export const messagesService = {fetchDiscussions, fetchDiscussion, fetchMessages, sendMessage, createBox, addBoxMember}

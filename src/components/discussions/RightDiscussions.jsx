@@ -35,10 +35,13 @@ const RightDiscussions = () => {
   }, [uncheckedMessageCount])
 
   return <>
-    <div className="flex justify-between items-center text-lg font-bold">
-      <div>Messages</div>
+    <div className="flex items-center text-lg font-bold">
+      <div className="mr-auto">Messages</div>
       <Link to={{pathname: "new"}}>
         <FontAwesomeIcon icon="fa-solid fa-pencil-square" className="text-gray-700 shadow-md" />
+      </Link>
+      <Link to={{pathname: "new_box"}} className="ml-2">
+        <FontAwesomeIcon icon="fa-solid fa-users" className="text-sm text-gray-700 shadow-md" />
       </Link>
     </div>
     <BestFriends />
