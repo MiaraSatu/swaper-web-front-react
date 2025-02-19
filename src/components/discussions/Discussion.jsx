@@ -32,7 +32,7 @@ const Discussion = () => {
   const submitMessageHandler = async (e) => {
     e.preventDefault()
     if(currentDiscussion && message != "") {
-      const messageResponse = await messagesService.sendMessage({content: message}, "sample", currentDiscussion.id, token, parent ? parent.id : null)
+      const messageResponse = await messagesService.sendMessage({content: message}, currentDiscussion.email ? "sample" : "inbox", currentDiscussion.id, token, parent ? parent.id : null)
       if(messageResponse) {
         newMessage(messageResponse)
         setMessage("")
@@ -57,7 +57,7 @@ const Discussion = () => {
 
   async function fetchMessages() {
     if(currentDiscussion) {
-      const messagesResponse = await messagesService.fetchMessages(currentDiscussion.id, token)
+      const messagesResponse = await messagesService.fetchMessages(currentDiscussion.id, token, (currentDiscussion.email ? "sample" : "inbox"))
       if(messagesResponse) {
         setChatList(messagesResponse.data.reverse())
         setSeeMoreUrl(messagesResponse.seeMoreUrl)

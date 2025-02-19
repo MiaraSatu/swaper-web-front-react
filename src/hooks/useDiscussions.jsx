@@ -84,9 +84,15 @@ function discussionReducer(state, action) {
       chatList: [...chats],
       reactivityStatus: "lastMessage",
       discussionsList: [...state.discussionsList.map(discussion => {
-        if(discussion.sender.id == state.currentDiscussion.id || discussion.receiver.id == state.currentDiscussion.id) {
-          return {...discussion, uncheckCount: 0, unreadCount: 0}
-        } 
+        if(!state.currentDiscussion.email && discussion.type == "inbox") {// inbox
+          if(state.currentDiscussion.id == discussion.id) {
+            return {...discussion, uncheckCount: 0, unreadCount: 0}
+          }
+        } else if(state.currentDiscussion.email && discussion.type == "sample") { // sample
+          if(discussion.sender.id == state.currentDiscussion.id || discussion.receiver.id == state.currentDiscussion.id) {
+            return {...discussion, uncheckCount: 0, unreadCount: 0}
+          } 
+        }
         return discussion
       })]
     }
@@ -101,14 +107,23 @@ function discussionReducer(state, action) {
   }
   if(action.type == "NEW_MESSAGE") {
     const chats = updateChatListQueuOnNewChat(state.chatList, action.payload)
+    console.log(action.payload)
     return {
       ...state,
       chatList: chats,
       discussionsList: [
         {...action.payload},
         ...state.discussionsList.filter(discussion => {
-          return !((discussion.sender.id == action.payload.sender.id && discussion.receiver.id == action.payload.receiver.id) || 
-          (discussion.sender.id == action.payload.receiver.id && discussion.receiver.id == action.payload.sender.id))
+          if(action.payload.type == "inbox" && discussion.type == "inbox") {
+            console.log("inbox found")
+            return discussion.boxReceiver.id != action.payload.boxReceiver.id;
+          }
+          if(action.payload.type == "sample" && discussion.type == "sample") {
+            console.log("sample found")
+            return !((discussion.sender.id == action.payload.sender.id && discussion.receiver.id == action.payload.receiver.id) || 
+              (discussion.sender.id == action.payload.receiver.id && discussion.receiver.id == action.payload.sender.id));
+          }
+          return true;
         })
       ],
       reactivityStatus: "lastMessage"
