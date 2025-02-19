@@ -58,6 +58,7 @@ const NewBox = () => {
     if(createdBox) {
       const addedMembers = await messagesService.addBoxMember(createdBox.id, members, token)
       if(addedMembers) {
+        await messagesService.sendMessage({content: `Hello everyone, I created a groupe named "${name}", ${description != "" ? description : ''}`}, "box", createdBox.id, token)
         console.log("Box created successfully")
         setMembers([])
         setResults(null)
