@@ -67,7 +67,12 @@ const Discussion = () => {
 
   useEffect(() => {
     async function fetchDiscussion(id) {
-      const discussion = await messagesService.fetchDiscussion(id, token)
+      let isBox = false
+      if(id[0] == "b") {
+        id = id.substring(1)
+        isBox = true
+      }
+      const discussion = await messagesService.fetchDiscussion(id, token, isBox)
       if(discussion != null) {setCurrentDiscussion(discussion)}
     }
     if(discussion_id) {

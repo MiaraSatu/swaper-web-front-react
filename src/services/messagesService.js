@@ -13,9 +13,9 @@ async function fetchDiscussions(token) {
   return response
 }
 
-async function fetchDiscussion(id, token) {
+async function fetchDiscussion(id, token, isBox = false) {
   let response = null
-  await axios.get(API_URL+"/discussion/"+id, {headers: {Authorization: "bearer "+token}})
+  await axios.get(`${API_URL}/discussion/${id}/${isBox ? "1" : "0"}`, {headers: {Authorization: "bearer "+token}})
   .then(({data}) => {
     response = data
   })
