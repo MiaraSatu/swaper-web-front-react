@@ -77,7 +77,7 @@ const FriendItem = ({friend}) => {
       <div className="w-full mt-2 flex justify-end">
         <button 
           className="py-1 px-3 text-sm rounded-md text-gray-50 bg-gray-900"
-          onClick={() => navigate("/"+friend.id)}
+          onClick={() => navigate("/discussion/"+friend.id)}
         >
           <FontAwesomeIcon icon="fa-solid fa-envelope" className="mr-2" />
           Chat
