@@ -7,7 +7,7 @@ import { messagesService } from "../../services/messagesService"
 import { useAuth } from "../../hooks/useAuth"
 import useHome from "../../hooks/useHome"
 import MessageItem from "./MessageItem"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 const Discussion = () => {
   const {discussion_id} = useParams()
@@ -131,7 +131,8 @@ const Discussion = () => {
         <FontAwesomeIcon icon="fa-solid fa-plus" className="mr-2" />
         See more
       </button>
-      {chatList.map((message, index) => <MessageItem 
+      { currentDiscussion
+        ? chatList.map((message, index) => <MessageItem 
             key={message.id} 
             message={message} 
             replyToHandler={replyToHandler}
@@ -139,6 +140,12 @@ const Discussion = () => {
             topReference={message.head ? topRef : null}
             lastTopReference={message.lastTop ? lastTopRef : null}
           />)
+        : <div className="w-full h-full flex flex-col justify-center items-center">
+            <Link to={"/discussion/new"}>
+              <FontAwesomeIcon icon="fa-solid fa-users" className="block text-6xl" />
+            </Link>
+            Let you select a discussion to display here! 
+          </div>
       }
     </div>
     <div className="relative w-full px-8 py-4 bg-gray-200">
