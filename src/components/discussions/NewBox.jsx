@@ -54,6 +54,7 @@ const NewBox = () => {
 
   const handleSubmitBox = async (e) => {
     e.preventDefault()
+    if(name == "" || members.length == 0) return ;
     const createdBox = await messagesService.createBox({name: name, description: description}, token)
     if(createdBox) {
       const addedMembers = await messagesService.addBoxMember(createdBox.id, members, token)
