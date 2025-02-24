@@ -78,11 +78,11 @@ const NewBox = () => {
       <FontAwesomeIcon icon="fa-solid fa-users" className="mr-2" />
       Create new discussion box
     </div>
-    <div className="px-8 py-4">
-      <form onSubmit={handleSubmitBox}>
+    <div className="w-full px-8 py-4">
+      <form onSubmit={handleSubmitBox} className="w-1/2">
         <label htmlFor="f-name" className="block">Box name</label>
         <input 
-          className="border border-gray-600 px-2"
+          className="w-full border border-gray-600 px-2"
           id="f-name"
           type="text"
           placeholder="E.g: utimate team" 
@@ -92,13 +92,13 @@ const NewBox = () => {
         <br />
         <label htmlFor="f-description" className="block">Description</label>
         <textarea 
-          className="border border-gray-600 px-2"
+          className="w-full border border-gray-600 px-2"
           id="f-description"
           placeholder="Team description"
           value={description}
           onChange={handleChangeDescription} 
         />
-        <div className="mt-2">
+        <div className="w-full mt-2">
           <label className="block">Select members</label>
           {members && members.length > 0
             ? <div>
@@ -109,12 +109,12 @@ const NewBox = () => {
                     alt={user.name} 
                   />
                   {user.name}
-                  <FontAwesomeIcon icon="fa-solid fa-x" className="text-xs text-red-600" />
+                  <FontAwesomeIcon icon="fa-solid fa-x" className="ml-2 text-xs text-red-600" />
                 </div>)}
               </div>
             : <></>
           }
-          <div className="inline px-2 py-1 border border-gray-400">
+          <div className="w-full px-2 py-1 border border-gray-400">
             <FontAwesomeIcon icon="fa-solid fa-search" className="text-gray-600 mr-2" />
             <input
               className="outline-none bg-transparent" 
@@ -126,7 +126,8 @@ const NewBox = () => {
           </div>
           {results && results.length > 0
             ? <div>
-                {results.map(user => <div key={user.id} onClick={() => addMember(user)}>
+                {results.map(user => <div key={user.id} className="flex my-2" onClick={() => addMember(user)}>
+                  <img src={user.imageUrl ? apiImageUrl(user.imageUrl) : avatar} alt={user.name} className="w-6 h-6 mr-2 object-cover" />
                   {user.name}
                   <FontAwesomeIcon icon="fa-solid fa-check" className={`${!user.added ? "hidden" : ""} text-sm text-blue-500`} />
                 </div>)}
