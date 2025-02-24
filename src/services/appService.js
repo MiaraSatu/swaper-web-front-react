@@ -25,8 +25,16 @@ function getMessageStatus(message) {
   return "sent"
 }
 
+function sliceTextBasedOnMaster(text, master) {
+  const tLen = text.length, mLen = master.length
+  if(mLen >= 70) return text.substring(0, 70);
+  if(tLen > mLen) return text.substring(0, mLen < 20 ? 20 : mLen) +"..."
+  return text
+}
+
 export const appService = {
   getDiscussionSubject,
   mergeDuplicated,
-  getMessageStatus
+  getMessageStatus,
+  sliceTextBasedOnMaster
 }

@@ -29,16 +29,4 @@
       @apply bg-gray-200;
     }
   }
-  .message {
-    @apply p-4 rounded-2xl;
-    &.long {
-      @apply w-3/4;
-    }
-    &.mine {
-      @apply bg-white;
-    }
-    &.not-mine {
-      @apply bg-gray-500 text-white;
-    }
-  }
 }
