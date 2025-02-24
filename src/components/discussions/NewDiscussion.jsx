@@ -16,7 +16,7 @@ const NewDiscussion = () => {
   const handleChangeKeyword = async (e) => {
     setKeyword(e.target.value)
     if(e.target.value == "") {
-      setResults(null)
+      fetchDefaultResult();
       return ;
     }
     const response = await usersService.searchFriend(e.target.value, token)
@@ -48,6 +48,7 @@ const NewDiscussion = () => {
       </form>
     </div>
     <div className="px-8">
+      <div className="font-semibold">Choise the person you want to chat</div>
       {results && results.length > 0
         ? results.map( user => <div key={user.id} className="flex items-center mt-4 cursor-pointer" onClick={() => navigate("../"+user.id)}>
               <img 
