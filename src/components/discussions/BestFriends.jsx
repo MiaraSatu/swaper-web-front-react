@@ -16,7 +16,7 @@ const BestFriends = () => {
     loadBestFriends()
   }, [])
 
-  return <div className="flex flex-nowrap">
+  return <div className="flex flex-nowrap w-full overflow-hidden">
     {bestFriends.map(friend => <div key={friend.id} className="text-center bg-gray-100 p-2 mx-1 rounded-md shadow-sm">
       <div className="w-12 h-12 min-w-12 min-h-12">
         <img 

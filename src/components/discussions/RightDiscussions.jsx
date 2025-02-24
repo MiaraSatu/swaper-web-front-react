@@ -34,7 +34,7 @@ const RightDiscussions = () => {
     }
   }, [uncheckedMessageCount])
 
-  return <>
+  return <div className="flex h-full flex-col">
     <div className="flex items-center text-lg font-bold">
       <div className="mr-auto">Messages</div>
       <Link to={{pathname: "new"}}>
@@ -63,11 +63,11 @@ const RightDiscussions = () => {
         </button>
       </div>
     </form>
-    <div className="w-full mt-4">
+    <div className="w-full grow overflow-scroll mt-4">
       <div className="text-gray-600 text-sm font-semibold">All chat</div>
       {discussionsList.map(disc => <DiscussionItem key={disc.id} discussion={disc} />)}
     </div>
-  </>
+  </div>
 }
 
 export default RightDiscussions

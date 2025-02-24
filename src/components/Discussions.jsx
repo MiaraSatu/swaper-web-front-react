@@ -8,7 +8,7 @@ const Discussions = () => {
     <div className="w-3/4 bg-gray-50">
       <Outlet />
     </div>
-    <div id="discussions" className="w-1/4 py-4 pr-8 pl-4">
+    <div id="discussions" className="w-1/4 h-screen py-4 pr-8 pl-4">
       <RightDiscussions />
     </div>
   </div>
