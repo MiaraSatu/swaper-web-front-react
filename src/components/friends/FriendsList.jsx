@@ -45,10 +45,10 @@ const FriendsList = () => {
     fetchFriends()
   }, [])
 
-  return <div className="w-full">
+  return <div className="w-full h-full flex flex-col">
     <div className="w-full text-lg font-bold">All your friends</div>
     <SearchFriendForm onSearch={searchResponseHandler} />
-    <div className="w-full mt-4">
+    <div className="grow overflow-scroll w-full mt-4">
       {searchResponse 
         ? searchResponse.map(result => <FriendItem key={result.id} friend={result} />)
         : friendsList.map((friend) => <FriendItem key={friend.id} friend={friend} />)
@@ -67,11 +67,11 @@ const FriendsList = () => {
 const FriendItem = ({friend}) => {
   const navigate = useNavigate()
 
-  return <div className="flex my-3 p-3 rounded shadow-md bg-gray-100">
+  return <div className="flex w-full my-3 p-3 rounded shadow-md bg-gray-100">
     <div className="w-16 h-16 rounded-full min-w-16">
       <img src={friend.imageUrl ? apiImageUrl(friend.imageUrl) : avatar} alt={friend.name} className="w-full h-full object-cover" />
     </div>
-    <div className="w-full ml-2">
+    <div className="grow ml-2 overflow-hidden text-ellipsis">
       <div className="font-semibold">{friend.name}</div>
       <div className="text-sm text-gray-500">{friend.email}</div>
       <div className="w-full mt-2 flex justify-end">
