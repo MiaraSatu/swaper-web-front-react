@@ -89,7 +89,7 @@ export const router = createBrowserRouter([
         </div>
       },
       {
-        path: "profile",
+        path: "profile/:userId?",
         element: <Profile />
       }
     ]

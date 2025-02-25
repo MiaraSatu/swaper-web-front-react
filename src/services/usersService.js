@@ -151,8 +151,44 @@ async function removeFriend(friendId, token) {
   return response
 }
 
+async function getUser(userId, token) {
+  let response = null
+  await axios.get(`${API_URL}/users/${userId}`, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when fetching user", error.response.data)
+  })
+  return response
+}
+
+async function updateUser(user, token) {
+  let response = null
+  await axios.put(`${API_URL}/users/`, user, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when updating user", error.response.data)
+  })
+  return response
+}
+
+async function updatePicture(formData, token) {
+  let response = null
+  await axios.post(`${API_URL}/users/picture`, formData, {headers: {Authorization: "bearer "+token}})
+  .then(({data}) => {
+    response = data
+  })
+  .catch((error) => {
+    console.error("Error when updating picture", error.response.data)
+  })
+  return response
+}
+
 const usersService = {fetchBestFriends, fetchPaginedFriends, fetchPaginedInvitations, fetchPaginedSuggestions, getReceivedInvitation, inviteFriend,
-  acceptInvitation, refuseInvitation, cancelInvitation, searchFriend, search, removeFriend
+  acceptInvitation, refuseInvitation, cancelInvitation, searchFriend, search, removeFriend, getUser, updateUser, updatePicture
 }
 
 export default usersService
