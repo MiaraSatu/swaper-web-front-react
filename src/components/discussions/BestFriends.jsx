@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import usersService from "../../services/usersService"
-import { apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
+import {appService} from "../../services/appService"
 
 const BestFriends = () => {
   const {token} = useAuth()
@@ -20,9 +19,9 @@ const BestFriends = () => {
     {bestFriends.map(friend => <div key={friend.id} className="text-center bg-gray-100 p-2 mx-1 rounded-md shadow-sm">
       <div className="w-12 h-12 min-w-12 min-h-12">
         <img 
-          src={friend.imageUrl ? apiImageUrl(friend.imageUrl) : avatar} 
+          src={appService.loadImage(friend.imageUrl)} 
           alt={friend.name} 
-          className="object-cover"
+          className="w-full h-full rounded-full object-cover"
         />
       </div>
       <div className="w-12 overflow-hidden text-ellipsis text-xs text-gray-800 font-semibold">{friend.name}</div>

@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import useDiscussions from "../../hooks/useDiscussions"
-import { apiFetch, apiImageUrl} from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
+import { apiFetch } from "../../services/api"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { messagesService } from "../../services/messagesService"
 import { useAuth } from "../../hooks/useAuth"
 import useHome from "../../hooks/useHome"
 import MessageItem from "./MessageItem"
 import { Link, useParams } from "react-router-dom"
+import { appService } from "../../services/appService"
 
 const Discussion = () => {
   const {discussion_id} = useParams()
@@ -113,9 +113,9 @@ const Discussion = () => {
       {currentDiscussion
         ? <div className="flex">
             <img 
-              src={currentDiscussion.imageUrl ? apiImageUrl(currentDiscussion.imageUrl) : avatar} 
+              src={appService.loadImage(currentDiscussion.imageUrl)} 
               alt={currentDiscussion.name}
-              className="w-12 h-12 mr-2 object-cover"
+              className="w-12 h-12 rounded-full mr-2 object-cover"
             />
             <div className="text-gray-800 font-bold">{currentDiscussion.name}</div>
           </div>

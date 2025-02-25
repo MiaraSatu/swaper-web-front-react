@@ -2,9 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
 import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
-import { apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
 import { useNavigate } from "react-router-dom"
+import { appService } from "../../services/appService"
 
 const NewDiscussion = () => {
   const navigate = useNavigate()
@@ -53,7 +52,7 @@ const NewDiscussion = () => {
         ? results.map( user => <div key={user.id} className="flex items-center mt-4 cursor-pointer" onClick={() => navigate("../"+user.id)}>
               <img 
                 className="w-8 h-8 object-cover rounded-full mr-2"
-                src={user.imageUrl ? apiImageUrl(user.imageUrl) : avatar} 
+                src={appService.loadImage(user.imageUrl)} 
                 alt={user.name}
               />
               <div className="">{user.name}</div>

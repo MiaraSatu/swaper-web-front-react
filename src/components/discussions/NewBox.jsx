@@ -2,10 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
-import { apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
 import { messagesService } from "../../services/messagesService"
 import { useNavigate } from "react-router-dom"
+import { appService } from "../../services/appService"
 
 const NewBox = () => {
   const navigate = useNavigate()
@@ -104,8 +103,8 @@ const NewBox = () => {
             ? <div>
                 {members.map(user => <div key={user.id} onClick={() => removeMember(user)}>
                   <img 
-                    className="inline w-4 h-4 mr-2"
-                    src={user.imageUrl ? apiImageUrl(user.imageUrl) : avatar} 
+                    className="inline w-6 h-6 rounded-full mr-2"
+                    src={appService.loadImage(user.imageUrl)} 
                     alt={user.name} 
                   />
                   {user.name}
@@ -127,7 +126,7 @@ const NewBox = () => {
           {results && results.length > 0
             ? <div>
                 {results.map(user => <div key={user.id} className="flex my-2" onClick={() => addMember(user)}>
-                  <img src={user.imageUrl ? apiImageUrl(user.imageUrl) : avatar} alt={user.name} className="w-6 h-6 mr-2 object-cover" />
+                  <img src={appService.loadImage(user.imageUrl)} alt={user.name} className="w-6 h-6 mr-2 rounded-full object-cover" />
                   {user.name}
                   <FontAwesomeIcon icon="fa-solid fa-check" className={`${!user.added ? "hidden" : ""} text-sm text-blue-500`} />
                 </div>)}

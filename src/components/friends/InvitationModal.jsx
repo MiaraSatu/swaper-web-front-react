@@ -1,11 +1,10 @@
 import { useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import usersService from "../../services/usersService"
-import { apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useFriends } from "../../hooks/useFriends"
 import useSearch from "../../hooks/useSearch"
+import { appService } from "../../services/appService"
 
 const InvitationModal = ({receiver, onClose}) => {
   const [message, setMessage] = useState()
@@ -46,7 +45,7 @@ const InvitationModal = ({receiver, onClose}) => {
       </div>
       <div className="flex">
         <div className="w-16 h-16 min-w-16 mr-4">
-          <img src={receiver.imageUrl ? apiImageUrl(receiver.imageUrl) : avatar} alt={receiver.name} className="object-cover" />
+          <img src={appService.loadImage(receiver.imageUrl)} alt={receiver.name} className="object-cover" />
         </div>
         <div>
           <div className="font-bold">{receiver.name}</div>

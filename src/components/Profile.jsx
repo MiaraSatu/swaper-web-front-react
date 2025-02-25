@@ -2,9 +2,8 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import usersService from "../services/usersService"
 import { useAuth } from "../hooks/useAuth"
-import { apiImageUrl } from "../services/api"
-import avatar from "../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { appService } from "../services/appService"
 
 const Profile = () => {
   const {userId} = useParams()
@@ -54,7 +53,7 @@ const Profile = () => {
                 </button>
                 <img 
                   className="rounded-full w-64 h-64 object-cover shadow"
-                  src={currentUser.imageUrl ? apiImageUrl(currentUser.imageUrl) : avatar} 
+                  src={appService.loadImage(currentUser.imageUrl)} 
                   alt={currentUser.name}
                 />
               </div>

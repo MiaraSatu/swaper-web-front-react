@@ -1,7 +1,6 @@
-import { apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useOutletContext } from "react-router-dom"
+import { appService } from "../../services/appService"
 
 
 const InvitationItem = ({invitation, subjectStatus = "receiver"}) => {
@@ -13,7 +12,7 @@ const InvitationItem = ({invitation, subjectStatus = "receiver"}) => {
       <div className="w-20 h-20 min-w-20 mr-4 rounded-lg">
         <img 
           className="w-full object-cover"
-          src={subject.imageUrl ? apiImageUrl(subject.imageUrl) : avatar} 
+          src={appService.loadImage(subject.imageUrl)} 
           alt={subject.name}
         />
       </div>

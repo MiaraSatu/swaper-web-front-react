@@ -1,11 +1,11 @@
 import { useFriends } from "../../hooks/useFriends"
 import { useAuth } from "../../hooks/useAuth"
-import { apiFetch, apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
+import { apiFetch } from "../../services/api"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import usersService from "../../services/usersService"
+import { appService } from "../../services/appService"
 
 
 const FriendsList = () => {
@@ -69,7 +69,7 @@ const FriendItem = ({friend}) => {
 
   return <div className="flex w-full my-3 p-3 rounded shadow-md bg-gray-100">
     <div className="w-16 h-16 rounded-full min-w-16">
-      <img src={friend.imageUrl ? apiImageUrl(friend.imageUrl) : avatar} alt={friend.name} className="w-full h-full object-cover" />
+      <img src={appService.loadImage(friend.imageUrl)} alt={friend.name} className="w-full h-full rounded-full object-cover" />
     </div>
     <div className="grow ml-2 overflow-hidden text-ellipsis">
       <div className="font-semibold">{friend.name}</div>

@@ -1,7 +1,5 @@
 import { format, isToday, isYesterday } from "date-fns"
 import { useAuth } from "../../hooks/useAuth"
-import { apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
 import useDiscussions from "../../hooks/useDiscussions"
 import { appService } from "../../services/appService"
 import MessageStatus from "./MessageStatus"
@@ -32,8 +30,8 @@ const DiscussionItem = ({discussion}) => {
     >
       <div className="w-1/5">
         <img 
-          className="object-cover"
-          src={subject.imageUrl ? apiImageUrl(subject.imageUrl) : avatar} alt={subject.name} 
+          className="w-12 h-12 object-cover rounded-full"
+          src={appService.loadImage(subject.imageUrl)} alt={subject.name} 
         />
       </div>
       <div className="w-4/5 pl-1">

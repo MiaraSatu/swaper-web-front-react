@@ -2,12 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import usersService from "../../services/usersService"
 import { useAuth } from "../../hooks/useAuth"
-import { apiImageUrl } from "../../services/api"
-import avatar from "../../assets/User_Avatar_2.png"
 import useSearch from "../../hooks/useSearch"
 import { useNavigate } from "react-router-dom"
 import InvitationModal from "./InvitationModal"
 import ReceivedInvitationModal from "./ReceivedInvitationModal"
+import { appService } from "../../services/appService"
 
 const Search = () => {
   const navigate = useNavigate()
@@ -56,7 +55,7 @@ const Search = () => {
           {results.map(user => <div key={user.id} className="flex p-4 mt-3 rounded-md shadow bg-white">
             <img 
               className="w-16 h-16 rounded-full object-cover mr-2"
-              src={user.imageUrl ? apiImageUrl(user.imageUrl) : avatar} 
+              src={appService.loadImage(user.imageUrl)} 
               alt={user.name} 
             />
             <div>

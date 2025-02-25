@@ -1,3 +1,6 @@
+import avatar from "../assets/User_Avatar_2.png"
+import { apiImageUrl } from "./api"
+
 function getDiscussionSubject(discussion, user) {
   if(!discussion) return null
   return (discussion.type == "sample") 
@@ -32,9 +35,14 @@ function sliceTextBasedOnMaster(text, master) {
   return text
 }
 
+function loadImage(path) {
+  return path ? apiImageUrl(path) : avatar
+}
+
 export const appService = {
   getDiscussionSubject,
   mergeDuplicated,
   getMessageStatus,
-  sliceTextBasedOnMaster
+  sliceTextBasedOnMaster,
+  loadImage
 }

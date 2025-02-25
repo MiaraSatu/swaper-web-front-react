@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { formatRelative } from "date-fns"
-import avatar from "../../assets/User_Avatar_2.png"
 import MessageStatus from "./MessageStatus"
 import { appService } from "../../services/appService"
 
@@ -32,9 +31,9 @@ const MessageItem = ({message, replyToHandler, lastReference, topReference, last
         {lastReference ? <div ref={lastReference}></div> : <></>}
         {!isMine && message.start
           ? <img 
-              src={message.sender.imageUrl ? apiImageUrl(message.sender.imageUrl) : avatar} 
+              src={appService.loadImage(message.sender.imageUrl)} 
               alt={message.sender.name} 
-              className="w-6 h-6 object-cover mr-2 border"
+              className="w-6 h-6 rounded-full object-cover mr-2 border"
             />
           : <div className="w-6 mr-2"></div>
         }

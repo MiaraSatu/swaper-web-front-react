@@ -3,8 +3,7 @@ import { useAuth } from "../../hooks/useAuth"
 import useSearch from "../../hooks/useSearch"
 import usersService from "../../services/usersService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import avatar from "../../assets/User_Avatar_2.png"
-import { apiImageUrl } from "../../services/api"
+import { appService } from "../../services/appService"
 
 const ReceivedInvitationModal = ({sender, onClose, onAccept, onRefuse}) => {
   const {token} = useAuth()
@@ -53,7 +52,7 @@ const ReceivedInvitationModal = ({sender, onClose, onAccept, onRefuse}) => {
             </div>
             <div className="flex">
               <div className="w-16 h-16 min-w-16 mr-4">
-                <img src={sender.imageUrl ? apiImageUrl(sender.imageUrl) : avatar} alt={sender.name} className="object-cover" />
+                <img src={appService.loadImage(sender.imageUrl)} alt={sender.name} className="object-cover" />
               </div>
               <div>
                 <div className="font-bold">{sender.name}</div>

@@ -2,9 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "../hooks/useAuth"
 import { Link, NavLink } from "react-router-dom"
 import { apiCountUncheckedMessage, apiCountUnreadMessage } from "../services/api"
-import avatar from "../assets/User_Avatar_2.png"
 import useHome from "../hooks/useHome"
 import { useEffect } from "react"
+import { appService } from "../services/appService"
 
 const LeftBar = () => {
   const {logout, user, token} = useAuth()
@@ -70,7 +70,7 @@ const LeftBar = () => {
       <Link to={"/profile"}>
         <div className="flex">
           <div className="w-12 h-12 min-w-12">
-            <img src={user.imageUrl ? user.imageUrl : avatar} alt="" className="w-full h-full object-cover" />
+            <img src={appService.loadImage(user.imageUrl)} alt="" className="w-full h-full rounded-full object-cover" />
           </div>
           <div className="px-2">
             <div className="text-white font-semibold">
