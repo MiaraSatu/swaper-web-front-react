@@ -67,7 +67,7 @@ const LeftBar = () => {
       </li>
     </ul>
     <div className="w-full">
-      <Link to={"/profile"}>
+      <Link to={"/profile/"+user.id}>
         <div className="flex">
           <div className="w-12 h-12 min-w-12">
             <img src={appService.loadImage(user.imageUrl)} alt="" className="w-full h-full rounded-full object-cover" />

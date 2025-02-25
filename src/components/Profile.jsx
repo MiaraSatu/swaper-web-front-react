@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, NavLink, Outlet, useParams } from "react-router-dom"
 import usersService from "../services/usersService"
 import { useAuth } from "../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { appService } from "../services/appService"
 import EditPictureModal from "./profile/EditPictureModal"
 import EditProfileModal from "./profile/EditProfileModal"
+import useProfile from "../hooks/useProfile"
+import { messagesService } from "../services/messagesService"
 
 const Profile = () => {
   const {userId} = useParams()
   const {user, token} = useAuth()
+  const {setFriends, setDiscussions} = useProfile()
+
   const [currentUser, setCurrentUser] = useState(null)
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openEditPictureModal, setOpenEditPictureModal] = useState(false)
@@ -19,6 +23,17 @@ const Profile = () => {
     const response = await usersService.getUser(id, token)
     if(response) {
       setCurrentUser(response)
+    }
+  }
+
+  const fetchAboutUser = async () => {
+    const friendsResponse = await usersService.fetchBestFriends(token)
+    if(friendsResponse) {
+      setFriends(friendsResponse)
+    }
+    const discussionsResponse = await messagesService.fetchDiscussions(token)
+    if(discussionsResponse) {
+      setDiscussions(discussionsResponse.data)
     }
   }
 
@@ -34,6 +49,7 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUser()
+    fetchAboutUser()
   }, [])
 
   return <div className="w-full h-screen">
@@ -72,6 +88,19 @@ const Profile = () => {
             <Link className="ml-2">
               <button className="px-3 py-2 text-white bg-red-600 rounded">Drop account</button>
             </Link>
+          </div>
+          <div className="px-20">
+            <ul className="flex mt-4">
+              <li className="mr-4">
+                <NavLink to={{pathname: "friends"}}>Friends (125)</NavLink>              
+              </li>
+              <li>
+                <NavLink to={{pathname: "discussions"}}>Discussions (23)</NavLink>
+              </li>
+            </ul>
+            <div>
+              <Outlet />
+            </div>
           </div>
         </div>
       : <div>User not found</div>

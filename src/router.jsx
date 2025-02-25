@@ -15,6 +15,9 @@ import Discussion from "./components/discussions/Discussion";
 import NewDiscussion from "./components/discussions/NewDiscussion";
 import NewBox from "./components/discussions/NewBox";
 import Profile from "./components/Profile";
+import FriendsOverview from "./components/profile/FriendsOverview";
+import DiscussionsOverview from "./components/profile/DiscussionsOverview";
+import { ProfileContextProvider } from "./hooks/useProfile";
 
 export const router = createBrowserRouter([
   {
@@ -89,8 +92,21 @@ export const router = createBrowserRouter([
         </div>
       },
       {
-        path: "profile/:userId?",
-        element: <Profile />
+        path: "profile/:userId",
+        element: <ProfileContextProvider>
+          <Profile />
+        </ProfileContextProvider>,
+        children: [
+          {index: true, path: "", element: <Navigate to={"friends"} replace /> },
+          {
+            path: "friends",
+            element: <FriendsOverview />
+          },
+          {
+            path: "discussions",
+            element: <DiscussionsOverview />
+          }
+        ]
       }
     ]
   }
