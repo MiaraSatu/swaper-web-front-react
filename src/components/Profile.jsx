@@ -10,7 +10,7 @@ const Profile = () => {
   const {user, token} = useAuth()
   const [currentUser, setCurrentUser] = useState(null)
   const [openEditModal, setOpenEditModal] = useState(false)
-  const [openEditPictureModal, setOpenEditPictureModal] = useState(true)
+  const [openEditPictureModal, setOpenEditPictureModal] = useState(false)
 
   const fetchUser = async () => {
     const id = userId ? userId : user.id
@@ -48,7 +48,7 @@ const Profile = () => {
           <div className="relative w-full px-20 bg-gray-400">
             <div className="relative top-32 flex items-center">
               <div className="relative w-64 h-64 mr-2">
-                <button className="absolute bottom-4 right-4">
+                <button className="absolute bottom-4 right-4" onClick={() => setOpenEditPictureModal(true)}>
                   <FontAwesomeIcon icon="fa-solid fa-camera" className="text-xl" />
                 </button>
                 <img 
@@ -139,7 +139,7 @@ const EditProfileModal = ({user, onClose, onUpdate}) => {
   </div>
 }
 
-const EditPictureModal = ({onClose, onEdit}) => {
+const EditPictureModal = ({onClose, onUpdate}) => {
   const {token} = useAuth()
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
@@ -154,12 +154,13 @@ const EditPictureModal = ({onClose, onEdit}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if(!file) return;
     const formData = new FormData()
     formData.append("file", file)
     const response = await usersService.updatePicture(formData, token)
     if(response) {
       onClose()
-      onEdit(response)
+      onUpdate(response)
     }
   }
 
@@ -181,7 +182,7 @@ const EditPictureModal = ({onClose, onEdit}) => {
           : <></>
         }
         <input type="file" name="image" accept="image/*" onChange={handleChange} />
-        <button type="submit">
+        <button type="submit" className="w-full px-2 py-1 mt-2 rounded text-white bg-green-600">
           Save image
         </button>
       </form>
