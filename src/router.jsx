@@ -14,6 +14,7 @@ import { SearchContextProvider } from "./hooks/useSearch";
 import Discussion from "./components/discussions/Discussion";
 import NewDiscussion from "./components/discussions/NewDiscussion";
 import NewBox from "./components/discussions/NewBox";
+import Profile from "./components/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +87,10 @@ export const router = createBrowserRouter([
         element: <div>
           Favorite elements neeggggaa!
         </div>
+      },
+      {
+        path: "profile",
+        element: <Profile />
       }
     ]
   }

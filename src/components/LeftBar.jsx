@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "../hooks/useAuth"
-import { NavLink } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import { apiCountUncheckedMessage, apiCountUnreadMessage } from "../services/api"
 import avatar from "../assets/User_Avatar_2.png"
 import useHome from "../hooks/useHome"
@@ -67,19 +67,21 @@ const LeftBar = () => {
       </li>
     </ul>
     <div className="w-full">
-      <div className="flex">
-        <div className="w-12 h-12 min-w-12">
-          <img src={user.imageUrl ? user.imageUrl : avatar} alt="" className="w-full h-full object-cover" />
-        </div>
-        <div className="px-2">
-          <div className="text-white font-semibold">
-            {user.name}
+      <Link to={"/profile"}>
+        <div className="flex">
+          <div className="w-12 h-12 min-w-12">
+            <img src={user.imageUrl ? user.imageUrl : avatar} alt="" className="w-full h-full object-cover" />
           </div>
-          <div className="text-gray-500 text-sm">
-            {user.email}
+          <div className="px-2">
+            <div className="text-white font-semibold">
+              {user.name}
+            </div>
+            <div className="text-gray-500 text-sm">
+              {user.email}
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
       <button 
         className="text-red-600 flex items-center mt-4"
         onClick={() => {
