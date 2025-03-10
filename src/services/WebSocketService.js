@@ -8,11 +8,11 @@ class WebSocketService {
   }
 
   connect = (onConnectCallBack) => {
-    if(this.client.activate) {
+    if(this.client && this.client.active) {
       if(onConnectCallBack) onConnectCallBack();
     }
     this.client = new Client({
-      webSocketFactory: new SockJs("http://localhost:8080/ws"),
+      webSocketFactory: () => new SockJs("http://localhost:8080/ws"),
       reconnectDelay: 5000,
       onConnect: () => {
         if(onConnectCallBack) onConnectCallBack();
@@ -24,7 +24,7 @@ class WebSocketService {
         console.log("WebSocket Disconnected");
       }
     })
-    this.client.active();
+    this.client.activate();
   }
 
   subscribe = (destination, callBack) => {

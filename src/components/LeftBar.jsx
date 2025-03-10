@@ -2,9 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "../hooks/useAuth"
 import { Link, NavLink } from "react-router-dom"
 import AppService from "../services/AppService"
+import { useWebSocket } from "../hooks/useWebSocket"
 
 const LeftBar = () => {
   const {logout, user, token} = useAuth()
+  const {newMessages} = useWebSocket();
 
   return <div className="w-full h-full flex flex-col justify-between py-4 px-8 bg-gray-900">
     <div className="w-full text-3xl">
@@ -18,6 +20,9 @@ const LeftBar = () => {
             <FontAwesomeIcon icon="fa-solid fa-envelope" />
           </div>
           Messages
+          <div>
+            {newMessages.length}
+          </div>
         </NavLink>
       </li>
       <li>

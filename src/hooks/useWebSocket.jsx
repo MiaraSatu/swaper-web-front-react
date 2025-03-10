@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useContext, useReducer } from "react";
 import { useEffect } from "react";
 import { createContext } from "react";
 import WebSocketService from "../services/WebSocketService";
@@ -42,15 +42,19 @@ export const WebSocketProvider = ({children}) => {
   }
 
   useEffect(() => {
-    WebSocketService.subscribe(`/user/message/${user.id}`, (message) => {
-      
-    });
+    WebSocketService.connect(() => {
+      WebSocketService.subscribe(`/user/message/${user.id}`, (message) => {
+        handleNewMessage(message);
+      });
+    })
 
     return () => WebSocketService.disconnect();
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{}}>
+    <WebSocketContext.Provider value={{
+      newMessages: state.newMessages,
+    }}>
       {children}
     </WebSocketContext.Provider>
   );
