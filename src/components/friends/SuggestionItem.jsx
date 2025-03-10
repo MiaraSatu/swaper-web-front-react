@@ -5,9 +5,11 @@ const SuggestionItem = ({user, openInvitationModal}) => {
   return <>
     <div className="w-64 p-3 bg-white shadow-sm mx-2 my-4 hover:shadow-md">
       <div className="w-full h-16 bg-gray-200 flex justify-center items-end relative">
-        <div className="w-20 h-20 rounded-full border-4 border-white absolute top-1/2">
-          <img src={appService.loadImage(user.imageUrl)} alt={user.name} />
-        </div>
+        <img 
+          className="w-20 h-20 rounded-full border-4 border-white absolute top-1/2"
+          src={appService.loadImage(user.imageUrl)} 
+          alt={user.name}
+        />
       </div>
       <div className="mt-10 text-center">
         <div className="font-bold">
