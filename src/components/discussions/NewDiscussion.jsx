@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
-import usersService from "../../services/usersService"
+import UsersService from "../../services/UsersService"
 import { useAuth } from "../../hooks/useAuth"
 import { useNavigate } from "react-router-dom"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 
 const NewDiscussion = () => {
   const navigate = useNavigate()
@@ -18,12 +18,12 @@ const NewDiscussion = () => {
       fetchDefaultResult();
       return ;
     }
-    const response = await usersService.searchFriend(e.target.value, token)
+    const response = await UsersService.searchFriend(e.target.value, token)
     if(response) setResults(response)
   }
 
   async function fetchDefaultResult() {
-    const response = await usersService.fetchBestFriends(token)
+    const response = await UsersService.fetchBestFriends(token)
     if(response) setResults(response)
   }
 
@@ -52,7 +52,7 @@ const NewDiscussion = () => {
         ? results.map( user => <div key={user.id} className="flex items-center mt-4 cursor-pointer" onClick={() => navigate("../"+user.id)}>
               <img 
                 className="w-8 h-8 object-cover rounded-full mr-2"
-                src={appService.loadImage(user.imageUrl)} 
+                src={AppService.loadImage(user.imageUrl)} 
                 alt={user.name}
               />
               <div className="">{user.name}</div>

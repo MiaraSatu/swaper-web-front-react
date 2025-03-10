@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import BestFriends from "./BestFriends"
 import { useEffect, useState } from "react"
-import { messagesService } from "../../services/messagesService"
+import MessagesService from "../../services/MessagesService"
 import { useAuth } from "../../hooks/useAuth"
 import useDiscussions from "../../hooks/useDiscussions"
 import DiscussionItem from "./DiscussionItem"
@@ -18,7 +18,7 @@ const RightDiscussions = () => {
   }
 
   async function fetchData() {
-    const discussionsResponse = await messagesService.fetchDiscussions(token)
+    const discussionsResponse = await MessagesService.fetchDiscussions(token)
     if(discussionsResponse) {
       setDiscussionsList(discussionsResponse.data)
     }

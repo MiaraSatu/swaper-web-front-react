@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { formatRelative } from "date-fns"
 import MessageStatus from "./MessageStatus"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 
 const MessageItem = ({message, replyToHandler, lastReference, topReference, lastTopReference}) => {
   const {user} = useAuth()
@@ -31,7 +31,7 @@ const MessageItem = ({message, replyToHandler, lastReference, topReference, last
         {lastReference ? <div ref={lastReference}></div> : <></>}
         {!isMine && message.start
           ? <img 
-              src={appService.loadImage(message.sender.imageUrl)} 
+              src={AppService.loadImage(message.sender.imageUrl)} 
               alt={message.sender.name} 
               className="w-6 h-6 rounded-full object-cover mr-2 border"
             />
@@ -51,7 +51,7 @@ const MessageItem = ({message, replyToHandler, lastReference, topReference, last
                     <FontAwesomeIcon icon="fa-solid fa-arrow-turn-up" className="mr-2" />
                     {message.replyTo.sender.id == user.id ? "you" : message.replyTo.sender.name}
                   </div>
-                  <div className="w-full text-nowrap overflow-hidden text-ellipsis">{appService.sliceTextBasedOnMaster(message.replyTo.content, message.content)}</div>
+                  <div className="w-full text-nowrap overflow-hidden text-ellipsis">{AppService.sliceTextBasedOnMaster(message.replyTo.content, message.content)}</div>
                 </div>
               : <></>
             }

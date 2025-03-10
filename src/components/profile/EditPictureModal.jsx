@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
-import usersService from "../../services/usersService"
+import usersService from "../../services/UsersService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const EditPictureModal = ({onClose, onUpdate}) => {

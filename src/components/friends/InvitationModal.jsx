@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
-import usersService from "../../services/usersService"
+import UsersService from "../../services/UsersService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useFriends } from "../../hooks/useFriends"
 import useSearch from "../../hooks/useSearch"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 
 const InvitationModal = ({receiver, onClose}) => {
   const [message, setMessage] = useState()
@@ -15,7 +15,7 @@ const InvitationModal = ({receiver, onClose}) => {
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    const response = await usersService.inviteFriend(receiver.id, message, token)
+    const response = await UsersService.inviteFriend(receiver.id, message, token)
     if(response) {
       if(results && results.length > 0) { // si c'est une recherche
         send(response.receiver)
@@ -45,7 +45,7 @@ const InvitationModal = ({receiver, onClose}) => {
       </div>
       <div className="flex">
         <div className="w-16 h-16 min-w-16 mr-4">
-          <img src={appService.loadImage(receiver.imageUrl)} alt={receiver.name} className="object-cover" />
+          <img src={AppService.loadImage(receiver.imageUrl)} alt={receiver.name} className="object-cover" />
         </div>
         <div>
           <div className="font-bold">{receiver.name}</div>

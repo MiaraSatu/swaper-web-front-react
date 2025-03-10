@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import loginService from "../../services/loginService"
+import LoginService from "../../services/LoginService"
 import { useAuth } from "../../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
@@ -11,7 +11,7 @@ const Login = ({changeCurrent}) => {
 
   const submitFormHandler = async (e) => {
     e.preventDefault()
-    const response = await loginService.apiLogin({username: email, password: password})
+    const response = await LoginService.apiLogin({username: email, password: password})
     if(response) { 
       login(response.token, response.user)
     } else {

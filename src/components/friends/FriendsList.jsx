@@ -1,11 +1,11 @@
 import { useFriends } from "../../hooks/useFriends"
 import { useAuth } from "../../hooks/useAuth"
-import { apiFetch } from "../../services/api"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import usersService from "../../services/usersService"
-import { appService } from "../../services/appService"
+import UsersService from "../../services/UsersService"
+import AppService from "../../services/AppService"
+import ApiService from "../../services/ApiService"
 
 
 const FriendsList = () => {
@@ -24,7 +24,7 @@ const FriendsList = () => {
 
   const fetchFriends = async () => {
     console.log("Fetch lanced [friendsList]")
-    const response = await usersService.fetchPaginedFriends(user.id, token)
+    const response = await UsersService.fetchPaginedFriends(user.id, token)
     if(response) {
       setFriendsList(response.data);
       setMoreUrl(response.seeMoreUrl)
@@ -33,7 +33,7 @@ const FriendsList = () => {
   
   const seeMoreHandler = async () => {
     console.log("seeMoreUrl value is", seeMoreUrl)
-    const more = await apiFetch(seeMoreUrl, token)
+    const more = await ApiService.fetch(seeMoreUrl, token)
     if(more) {
       addFriendsList(more.data)
       setMoreUrl(seeMoreUrl = more.seeMoreUrl)
@@ -69,7 +69,7 @@ const FriendItem = ({friend}) => {
 
   return <div className="flex w-full my-3 p-3 rounded shadow-md bg-gray-100">
     <div className="w-16 h-16 rounded-full min-w-16">
-      <img src={appService.loadImage(friend.imageUrl)} alt={friend.name} className="w-full h-full rounded-full object-cover" />
+      <img src={AppService.loadImage(friend.imageUrl)} alt={friend.name} className="w-full h-full rounded-full object-cover" />
     </div>
     <div className="grow ml-2 overflow-hidden text-ellipsis">
       <div className="font-semibold">{friend.name}</div>
@@ -101,7 +101,7 @@ const SearchFriendForm = ({onSearch}) => {
       onSearch(null)
       return;
     }
-    const response = await usersService.searchFriend(e.target.value, token)
+    const response = await UsersService.searchFriend(e.target.value, token)
     onSearch(response)
   }
 

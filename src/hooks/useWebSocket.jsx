@@ -2,7 +2,6 @@ import { useReducer } from "react";
 import { useEffect } from "react";
 import { createContext } from "react";
 import WebSocketService from "../services/WebSocketService";
-import { apiCountUncheckedMessage } from "../services/api";
 import { useAuth } from "./useAuth";
 
 const initialState = {

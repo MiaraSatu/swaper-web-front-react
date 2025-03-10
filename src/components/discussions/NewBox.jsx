@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
-import usersService from "../../services/usersService"
+import usersService from "../../services/UsersService"
 import { useAuth } from "../../hooks/useAuth"
-import { messagesService } from "../../services/messagesService"
+import MessagesService from "../../services/MessagesService"
 import { useNavigate } from "react-router-dom"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 
 const NewBox = () => {
   const navigate = useNavigate()
@@ -54,11 +54,11 @@ const NewBox = () => {
   const handleSubmitBox = async (e) => {
     e.preventDefault()
     if(name == "" || members.length == 0) return ;
-    const createdBox = await messagesService.createBox({name: name, description: description}, token)
+    const createdBox = await MessagesService.createBox({name: name, description: description}, token)
     if(createdBox) {
-      const addedMembers = await messagesService.addBoxMember(createdBox.id, members, token)
+      const addedMembers = await MessagesService.addBoxMember(createdBox.id, members, token)
       if(addedMembers) {
-        await messagesService.sendMessage({content: `Hello everyone, I created a groupe named "${name}", ${description != "" ? description : ''}`}, "box", createdBox.id, token)
+        await MessagesService.sendMessage({content: `Hello everyone, I created a groupe named "${name}", ${description != "" ? description : ''}`}, "box", createdBox.id, token)
         console.log("Box created successfully")
         setMembers([])
         setResults(null)
@@ -104,7 +104,7 @@ const NewBox = () => {
                 {members.map(user => <div key={user.id} onClick={() => removeMember(user)}>
                   <img 
                     className="inline w-6 h-6 rounded-full mr-2"
-                    src={appService.loadImage(user.imageUrl)} 
+                    src={AppService.loadImage(user.imageUrl)} 
                     alt={user.name} 
                   />
                   {user.name}
@@ -126,7 +126,7 @@ const NewBox = () => {
           {results && results.length > 0
             ? <div>
                 {results.map(user => <div key={user.id} className="flex my-2" onClick={() => addMember(user)}>
-                  <img src={appService.loadImage(user.imageUrl)} alt={user.name} className="w-6 h-6 mr-2 rounded-full object-cover" />
+                  <img src={AppService.loadImage(user.imageUrl)} alt={user.name} className="w-6 h-6 mr-2 rounded-full object-cover" />
                   {user.name}
                   <FontAwesomeIcon icon="fa-solid fa-check" className={`${!user.added ? "hidden" : ""} text-sm text-blue-500`} />
                 </div>)}

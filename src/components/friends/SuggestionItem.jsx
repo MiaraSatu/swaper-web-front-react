@@ -1,4 +1,4 @@
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 
 const SuggestionItem = ({user, openInvitationModal}) => {
 
@@ -7,7 +7,7 @@ const SuggestionItem = ({user, openInvitationModal}) => {
       <div className="w-full h-16 bg-gray-200 flex justify-center items-end relative">
         <img 
           className="w-20 h-20 rounded-full border-4 border-white absolute top-1/2"
-          src={appService.loadImage(user.imageUrl)} 
+          src={AppService.loadImage(user.imageUrl)} 
           alt={user.name}
         />
       </div>

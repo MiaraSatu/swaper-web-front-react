@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import { appService } from "../services/appService";
+import AppService from "../services/AppService";
 
 const initialState = {
   currentDiscussion: null,
@@ -32,7 +32,7 @@ function updateChatListGroup(chatList) {
       owner = chatList[i+1].sender
     }
   }
-  return appService.mergeDuplicated(chatList)
+  return AppService.mergeDuplicated(chatList)
 }
 
 function initializeChatListQueu(chatList) {
@@ -137,6 +137,7 @@ const DiscussionContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(discussionReducer, initialState)
 
   const setCurrentDiscussion = (discussion) => {
+    console.log("This is called");
     if(discussion) dispatch({type: "SET_CURRENT_DISCUSSION", payload: discussion})
   }
 

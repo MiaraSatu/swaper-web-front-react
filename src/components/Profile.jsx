@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import { Link, NavLink, Outlet, useParams } from "react-router-dom"
-import usersService from "../services/usersService"
+import usersService from "../services/UsersService"
 import { useAuth } from "../hooks/useAuth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { appService } from "../services/appService"
 import EditPictureModal from "./profile/EditPictureModal"
 import EditProfileModal from "./profile/EditProfileModal"
 import useProfile from "../hooks/useProfile"
-import { messagesService } from "../services/messagesService"
+import MessagesService from "../services/MessagesService"
+import AppService from "../services/AppService"
 
 const Profile = () => {
   const {userId} = useParams()
@@ -31,7 +31,7 @@ const Profile = () => {
     if(friendsResponse) {
       setFriends(friendsResponse)
     }
-    const discussionsResponse = await messagesService.fetchDiscussions(token)
+    const discussionsResponse = await MessagesService.fetchDiscussions(token)
     if(discussionsResponse) {
       setDiscussions(discussionsResponse.data)
     }
@@ -71,7 +71,7 @@ const Profile = () => {
                 </button>
                 <img 
                   className="rounded-full w-64 h-64 object-cover shadow"
-                  src={appService.loadImage(currentUser.imageUrl)} 
+                  src={AppService.loadImage(currentUser.imageUrl)} 
                   alt={currentUser.name}
                 />
               </div>

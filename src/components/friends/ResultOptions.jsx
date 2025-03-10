@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/useAuth"
 import useSearch from "../../hooks/useSearch"
-import usersService from "../../services/usersService"
+import UsersService from "../../services/UsersService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal}) => {
@@ -15,7 +15,7 @@ const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal
 
   const handleRemove = async () => {
     if(confirm(`Are you sure to remove ${user.name} (${user.email}) from your friend list?`)) {
-      const response = await usersService.removeFriend(user.id, token)
+      const response = await UsersService.removeFriend(user.id, token)
       if(response) remove(response);
     }
   }
@@ -33,7 +33,7 @@ const ResultOptions = ({user, onOpenSendRequestModal, onOpenReceivedRequestModal
   }
 
   const handleCancel = async () => {
-    const response = await usersService.cancelInvitation(user.id, token, true)
+    const response = await UsersService.cancelInvitation(user.id, token, true)
     if(response) cancel(response)
   }
 

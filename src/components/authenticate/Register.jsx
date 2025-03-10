@@ -1,5 +1,5 @@
 import { useState } from "react"
-import loginService from "../../services/loginService"
+import LoginService from "../../services/LoginService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const Register = ({changeCurrent}) => {
@@ -17,7 +17,7 @@ const Register = ({changeCurrent}) => {
     if(name == "" || email == "" || password.length < 4) {
       return setError("Recheck you form")
     }
-    const response = await loginService.apiRegister({name: name, email: email, password: password})
+    const response = await LoginService.apiRegister({name: name, email: email, password: password})
     if(!response.error) {
       changeCurrent()
     } else {

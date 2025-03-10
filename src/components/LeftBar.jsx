@@ -1,24 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "../hooks/useAuth"
 import { Link, NavLink } from "react-router-dom"
-import { apiCountUncheckedMessage, apiCountUnreadMessage } from "../services/api"
-import useHome from "../hooks/useHome"
-import { useEffect } from "react"
-import { appService } from "../services/appService"
+import AppService from "../services/AppService"
 
 const LeftBar = () => {
   const {logout, user, token} = useAuth()
-  const {unreadMessageCount, uncheckedMessageCount, setUnreadMessageCount, setUncheckedMessageCount} = useHome()
-
-  useEffect(() => {
-    const checkDataInterval = setInterval(async () => {
-      const messageCount = await apiCountUnreadMessage(token)
-      if(messageCount != null) setUnreadMessageCount(messageCount)
-      const uncheckedCount = await apiCountUncheckedMessage(token)
-      if(uncheckedCount != null) setUncheckedMessageCount(uncheckedCount)
-    }, 5000);
-    return () => clearInterval(checkDataInterval)
-  }, [])
 
   return <div className="w-full h-full flex flex-col justify-between py-4 px-8 bg-gray-900">
     <div className="w-full text-3xl">
@@ -32,16 +18,6 @@ const LeftBar = () => {
             <FontAwesomeIcon icon="fa-solid fa-envelope" />
           </div>
           Messages
-          {
-            unreadMessageCount > 0
-            ? <div className="w-6 h-6 flex justify-center items-center ml-auto text-xs rounded-full text-gray-900 bg-gray-50">
-                {unreadMessageCount}
-              </div>
-            : <></>
-          }
-          <div>
-            <span>c: {uncheckedMessageCount}</span>
-          </div>
         </NavLink>
       </li>
       <li>
@@ -73,7 +49,7 @@ const LeftBar = () => {
       <Link to={"/profile/"+user.id}>
         <div className="flex">
           <div className="w-12 h-12 min-w-12">
-            <img src={appService.loadImage(user.imageUrl)} alt="" className="w-full h-full rounded-full object-cover" />
+            <img src={AppService.loadImage(user.imageUrl)} alt="" className="w-full h-full rounded-full object-cover" />
           </div>
           <div className="px-2">
             <div className="text-white font-semibold">

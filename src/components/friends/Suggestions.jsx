@@ -4,10 +4,10 @@ import SuggestionItem from "./SuggestionItem"
 import { useAuth } from "../../hooks/useAuth"
 import { Link, useNavigate } from "react-router-dom"
 import InvitationModal from "./InvitationModal"
-import usersService from "../../services/usersService"
-import { apiFetch } from "../../services/api"
+import UsersService from "../../services/UsersService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import InvitationNav from "./InvitationNav"
+import ApiService from "../../services/ApiService"
 
 const Suggestions = () => {
   const navigate = useNavigate()
@@ -33,7 +33,7 @@ const Suggestions = () => {
   }
 
   const seeMoreHandler = async () => {
-    const more = await apiFetch(seeMoreUrl, token)
+    const more = await ApiService.fetch(seeMoreUrl, token)
     if(more) {
       setSuggestionsList(more.data)
       setSeeMoreUrl(more.seeMoreUrl)
@@ -42,7 +42,7 @@ const Suggestions = () => {
 
   const fetchSuggestions = async () => {
     console.log("Fetch lanced [Suggestions]")
-    const suggestionsResponse = await usersService.fetchPaginedSuggestions(token)
+    const suggestionsResponse = await UsersService.fetchPaginedSuggestions(token)
     if(suggestionsResponse) {
       setSuggestionsList(suggestionsResponse.data, true)
       setSeeMoreUrl(suggestionsResponse.seeMoreUrl)

@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
-import usersService from "../../services/usersService"
+import UsersService from "../../services/UsersService"
 import { useAuth } from "../../hooks/useAuth"
 import useSearch from "../../hooks/useSearch"
 import { useNavigate } from "react-router-dom"
 import InvitationModal from "./InvitationModal"
 import ReceivedInvitationModal from "./ReceivedInvitationModal"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 import ResultOptions from "./ResultOptions"
 
 const Search = () => {
@@ -23,7 +23,7 @@ const Search = () => {
       setResults(null)
       return ;
     }
-    const response = await usersService.search(e.target.value, token)
+    const response = await UsersService.search(e.target.value, token)
     if(response) {
       setResults(response)
     } else {
@@ -56,7 +56,7 @@ const Search = () => {
           {results.map(user => <div key={user.id} className="flex p-4 mt-3 rounded-md shadow bg-white">
             <img 
               className="w-16 h-16 rounded-full object-cover mr-2"
-              src={appService.loadImage(user.imageUrl)} 
+              src={AppService.loadImage(user.imageUrl)} 
               alt={user.name} 
             />
             <div>

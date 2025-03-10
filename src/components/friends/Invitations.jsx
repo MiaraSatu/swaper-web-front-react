@@ -1,5 +1,5 @@
 import { useFriends } from "../../hooks/useFriends"
-import usersService from "../../services/usersService"
+import UsersService from "../../services/UsersService"
 import { useAuth } from "../../hooks/useAuth"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
@@ -12,21 +12,21 @@ const Invitations = () => {
   const navigate = useNavigate()
 
   const acceptHandler = async (invitation) => {
-    const accepted = await usersService.acceptInvitation(invitation.id, token)
+    const accepted = await UsersService.acceptInvitation(invitation.id, token)
     if(accepted) {
       acceptRequest(accepted)
     }
   }
 
   const refuseHandler = async (invitation) => {
-    const user = await usersService.refuseInvitation(invitation.id, token)
+    const user = await UsersService.refuseInvitation(invitation.id, token)
     if(user) {
       refuseRequest(user)
     }
   }
 
   const cancelHandler = async (invitation) => {
-    const canceled = await usersService.cancelInvitation(invitation.id, token)
+    const canceled = await UsersService.cancelInvitation(invitation.id, token)
     if(canceled) {
       cancelRequest(canceled)
     }
@@ -40,8 +40,8 @@ const Invitations = () => {
 
   const fetchRequests = async () => {
     console.log("Fetch lanced [Invitations]")
-    const receivedResponse = await usersService.fetchPaginedInvitations("received", token)
-    const sentResponse = await usersService.fetchPaginedInvitations("sent", token)
+    const receivedResponse = await UsersService.fetchPaginedInvitations("received", token)
+    const sentResponse = await UsersService.fetchPaginedInvitations("sent", token)
     if(receivedResponse)
       setRequests("received", receivedResponse.data, true)
     if(sentResponse)

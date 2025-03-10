@@ -1,5 +1,5 @@
 import useProfile from "../../hooks/useProfile"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 import ResultOptions from "../friends/ResultOptions"
 
 const FriendsOverview = () => {
@@ -12,7 +12,7 @@ const FriendsOverview = () => {
             <div className="flex">
               <img 
                 className="w-16 h-16 rounded-full object-cover mr-2"
-                src={appService.loadImage(friend.imageUrl)} 
+                src={AppService.loadImage(friend.imageUrl)} 
                 alt={friend.name} 
               />
               <div>

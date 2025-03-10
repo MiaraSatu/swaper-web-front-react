@@ -1,14 +1,14 @@
 import { format, isToday, isYesterday } from "date-fns"
 import { useAuth } from "../../hooks/useAuth"
 import useDiscussions from "../../hooks/useDiscussions"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 import MessageStatus from "./MessageStatus"
 
 const DiscussionItem = ({discussion}) => {
   const {user} = useAuth()
   const {setCurrentDiscussion} = useDiscussions()
 
-  const subject = appService.getDiscussionSubject(discussion, user)
+  const subject = AppService.getDiscussionSubject(discussion, user)
 
   const formatDate = (stringDate) => {
     const date = Date.parse(stringDate)
@@ -31,7 +31,7 @@ const DiscussionItem = ({discussion}) => {
       <div className="w-1/5">
         <img 
           className="w-12 h-12 object-cover rounded-full"
-          src={appService.loadImage(subject.imageUrl)} alt={subject.name} 
+          src={AppService.loadImage(subject.imageUrl)} alt={subject.name} 
         />
       </div>
       <div className="w-4/5 pl-1">

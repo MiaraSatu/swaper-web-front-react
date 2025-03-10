@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom"
-import Discussion from "./discussions/Discussion"
 import RightDiscussions from "./discussions/RightDiscussions"
 
 const Discussions = () => {

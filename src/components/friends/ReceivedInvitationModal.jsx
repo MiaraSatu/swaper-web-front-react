@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import useSearch from "../../hooks/useSearch"
-import usersService from "../../services/usersService"
+import UsersService from "../../services/UsersService"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 
 const ReceivedInvitationModal = ({sender, onClose, onAccept, onRefuse}) => {
   const {token} = useAuth()
@@ -11,7 +11,7 @@ const ReceivedInvitationModal = ({sender, onClose, onAccept, onRefuse}) => {
   const {accept, refuse} = useSearch()
 
   const handleAccept = async () => {
-    const acceptedRequest = await usersService.acceptInvitation(request.id, token)
+    const acceptedRequest = await UsersService.acceptInvitation(request.id, token)
     if(acceptedRequest) {
       accept(acceptedRequest.sender)
       onClose()
@@ -19,7 +19,7 @@ const ReceivedInvitationModal = ({sender, onClose, onAccept, onRefuse}) => {
   }
 
   const handleRefuse = async () => {
-    const refusedUser = await usersService.refuseInvitation(request.id, token)
+    const refusedUser = await UsersService.refuseInvitation(request.id, token)
     if(refusedUser) {
       refuse(refusedUser)
       onClose()
@@ -27,7 +27,7 @@ const ReceivedInvitationModal = ({sender, onClose, onAccept, onRefuse}) => {
   }
 
   async function fetchRequest() {
-    const requestResponse = await usersService.getReceivedInvitation(sender.id, token)
+    const requestResponse = await UsersService.getReceivedInvitation(sender.id, token)
     if(requestResponse) setRequest(requestResponse)
   }
 
@@ -52,7 +52,7 @@ const ReceivedInvitationModal = ({sender, onClose, onAccept, onRefuse}) => {
             </div>
             <div className="flex">
               <div className="w-16 h-16 min-w-16 mr-4">
-                <img src={appService.loadImage(sender.imageUrl)} alt={sender.name} className="object-cover" />
+                <img src={AppService.loadImage(sender.imageUrl)} alt={sender.name} className="object-cover" />
               </div>
               <div>
                 <div className="font-bold">{sender.name}</div>

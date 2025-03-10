@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import useDiscussions from "../../hooks/useDiscussions"
-import { apiFetch } from "../../services/api"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
-import { messagesService } from "../../services/messagesService"
+import MessagesService from "../../services/MessagesService"
 import { useAuth } from "../../hooks/useAuth"
 import useHome from "../../hooks/useHome"
 import MessageItem from "./MessageItem"
 import { Link, useParams } from "react-router-dom"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
+import ApiService from "../../services/ApiService"
 
 const Discussion = () => {
   const {discussion_id} = useParams()
@@ -32,7 +32,7 @@ const Discussion = () => {
   const submitMessageHandler = async (e) => {
     e.preventDefault()
     if(currentDiscussion && message != "") {
-      const messageResponse = await messagesService.sendMessage({content: message}, currentDiscussion.email ? "sample" : "inbox", currentDiscussion.id, token, parent ? parent.id : null)
+      const messageResponse = await MessagesService.sendMessage({content: message}, currentDiscussion.email ? "sample" : "inbox", currentDiscussion.id, token, parent ? parent.id : null)
       if(messageResponse) {
         newMessage(messageResponse)
         setMessage("")
@@ -46,7 +46,7 @@ const Discussion = () => {
   }
 
   const seeMoreHandler = async () => {
-    const response = await apiFetch(seeMoreUrl, token)
+    const response = await ApiService.fetch(seeMoreUrl, token)
     if(response) {
       if(response.data.length > 0) {
         addChatList(response.data.reverse())
@@ -57,7 +57,7 @@ const Discussion = () => {
 
   async function fetchMessages() {
     if(currentDiscussion) {
-      const messagesResponse = await messagesService.fetchMessages(currentDiscussion.id, token, (currentDiscussion.email ? "sample" : "inbox"))
+      const messagesResponse = await MessagesService.fetchMessages(currentDiscussion.id, token, (currentDiscussion.email ? "sample" : "inbox"))
       if(messagesResponse) {
         setChatList(messagesResponse.data.reverse())
         setSeeMoreUrl(messagesResponse.seeMoreUrl)
@@ -72,7 +72,7 @@ const Discussion = () => {
         id = id.substring(1)
         isBox = true
       }
-      const discussion = await messagesService.fetchDiscussion(id, token, isBox)
+      const discussion = await MessagesService.fetchDiscussion(id, token, isBox)
       if(discussion != null) {setCurrentDiscussion(discussion)}
     }
     if(discussion_id) {
@@ -113,7 +113,7 @@ const Discussion = () => {
       {currentDiscussion
         ? <div className="flex">
             <img 
-              src={appService.loadImage(currentDiscussion.imageUrl)} 
+              src={AppService.loadImage(currentDiscussion.imageUrl)} 
               alt={currentDiscussion.name}
               className="w-12 h-12 rounded-full mr-2 object-cover"
             />

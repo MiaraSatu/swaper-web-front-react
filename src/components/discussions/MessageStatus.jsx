@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "../../hooks/useAuth"
-import { appService } from "../../services/appService"
+import AppService from "../../services/AppService"
 
 const MessageStatus = ({message}) => {
   const {user} = useAuth()
-  const status = appService.getMessageStatus(message)
+  const status = AppService.getMessageStatus(message)
 
   return <>
     { (user.id == message.sender.id) 
