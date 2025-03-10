@@ -8,7 +8,7 @@ import { appService } from "../services/appService"
 
 const LeftBar = () => {
   const {logout, user, token} = useAuth()
-  const {unreadMessageCount, setUnreadMessageCount, setUncheckedMessageCount} = useHome()
+  const {unreadMessageCount, uncheckedMessageCount, setUnreadMessageCount, setUncheckedMessageCount} = useHome()
 
   useEffect(() => {
     const checkDataInterval = setInterval(async () => {
@@ -39,6 +39,9 @@ const LeftBar = () => {
               </div>
             : <></>
           }
+          <div>
+            <span>c: {uncheckedMessageCount}</span>
+          </div>
         </NavLink>
       </li>
       <li>

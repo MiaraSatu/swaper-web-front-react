@@ -74,4 +74,5 @@ async function addBoxMember(boxId, members, token) {
   return response;
 }
 
+
 export const messagesService = {fetchDiscussions, fetchDiscussion, fetchMessages, sendMessage, createBox, addBoxMember}
