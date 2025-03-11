@@ -128,13 +128,18 @@ function discussionReducer(state, action) {
     }
   }
   if(action.type == "NEW_MESSAGE") {
-    const chats = isCompatible(state.currentDiscussion, action.payload) ? updateChatListQueuOnNewChat(state.chatList, action.payload) : state.chatList;
-    console.log(action.payload)
+    const behovetoCurrentDiscussion = isCompatible(state.currentDiscussion, action.payload);
+    const chats = behovetoCurrentDiscussion ? updateChatListQueuOnNewChat(state.chatList, action.payload) : state.chatList;
+    const newChat = (state.currentDiscussion.id == action.payload.sender.id 
+      || (action.payload.receiver && state.currentDiscussion.id == action.payload.receiver.id)
+      || (action.payload.boxReceiver && state.currentDiscussion.id == action.payload.boxReceiver.id)) 
+      ? {...action.payload, unreadCount: 0} 
+      : {...action.payload};
     return {
       ...state,
       chatList: chats,
       discussionsList: [
-        {...action.payload},
+        newChat,
         ...state.discussionsList.filter(discussion => {
           return !isMessageCompatible(discussion, action.payload);
         })
