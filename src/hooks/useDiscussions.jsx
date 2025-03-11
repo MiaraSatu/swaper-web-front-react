@@ -1,5 +1,6 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import AppService from "../services/AppService";
+import { useWebSocket } from "./useWebSocket";
 
 const initialState = {
   currentDiscussion: null,
@@ -61,7 +62,28 @@ function updateChatListQueu(chatList, paginationLimit = 10) {
 
 function updateChatListQueuOnNewChat(chats, chat) {
   chats = updateChatListQueu(chats)
-  return [...chats, {...chat, last: true}]
+  return updateChatListGroup([...chats, {...chat, last: true}]);
+}
+
+function isCompatible(subject, message) {
+  if(!subject || !message) return false;
+  if(!subject.email && (message.type == "inbox") && (subject.id == message.boxReceiver.id) ) {
+    return true;
+  }
+  if(subject.email && (message.type == "sample") && (subject.id == message.sender.id || subject.id == message.receiver.id)) {
+    return true;
+  }
+  return false;
+}
+
+function isMessageCompatible(lastMessage, newMessage) {
+  if(!lastMessage || !newMessage || lastMessage.type != newMessage.type) return false;
+  // for same type case [sample or inbox]
+  if(lastMessage.type == "sample") {
+    return ((lastMessage.sender.id == newMessage.sender.id) && (lastMessage.receiver.id == newMessage.receiver.id))
+          || ((lastMessage.sender.id == newMessage.receiver.id) && (lastMessage.receiver.id == newMessage.sender.id)); 
+  }
+  return (lastMessage.boxReceiver.id == newMessage.boxReceiver.id);
 }
 
 function discussionReducer(state, action) {
@@ -106,7 +128,7 @@ function discussionReducer(state, action) {
     }
   }
   if(action.type == "NEW_MESSAGE") {
-    const chats = updateChatListQueuOnNewChat(state.chatList, action.payload)
+    const chats = isCompatible(state.currentDiscussion, action.payload) ? updateChatListQueuOnNewChat(state.chatList, action.payload) : state.chatList;
     console.log(action.payload)
     return {
       ...state,
@@ -114,16 +136,7 @@ function discussionReducer(state, action) {
       discussionsList: [
         {...action.payload},
         ...state.discussionsList.filter(discussion => {
-          if(action.payload.type == "inbox" && discussion.type == "inbox") {
-            console.log("inbox found")
-            return discussion.boxReceiver.id != action.payload.boxReceiver.id;
-          }
-          if(action.payload.type == "sample" && discussion.type == "sample") {
-            console.log("sample found")
-            return !((discussion.sender.id == action.payload.sender.id && discussion.receiver.id == action.payload.receiver.id) || 
-              (discussion.sender.id == action.payload.receiver.id && discussion.receiver.id == action.payload.sender.id));
-          }
-          return true;
+          return !isMessageCompatible(discussion, action.payload);
         })
       ],
       reactivityStatus: "lastMessage"
@@ -134,11 +147,13 @@ function discussionReducer(state, action) {
 }
 
 const DiscussionContextProvider = ({children}) => {
+  const {forConsumer, setActiveConsumer} = useWebSocket();
   const [state, dispatch] = useReducer(discussionReducer, initialState)
 
   const setCurrentDiscussion = (discussion) => {
-    console.log("This is called");
-    if(discussion) dispatch({type: "SET_CURRENT_DISCUSSION", payload: discussion})
+    if(discussion) {
+      dispatch({type: "SET_CURRENT_DISCUSSION", payload: discussion});
+    }
   }
 
   const setDiscussionsList = (discussions) => {
@@ -156,6 +171,17 @@ const DiscussionContextProvider = ({children}) => {
   const newMessage = (message) => {
     if(message) dispatch({type: "NEW_MESSAGE", payload: message})
   }
+
+  useEffect(() => {
+    if(forConsumer) {
+      newMessage(forConsumer);
+    }
+  }, [forConsumer]);
+
+  useEffect(() => {
+    setActiveConsumer(true);
+    return () => setActiveConsumer(false);
+  }, []);
 
   return <DiscussionContext.Provider value={{
     currentDiscussion: state.currentDiscussion,

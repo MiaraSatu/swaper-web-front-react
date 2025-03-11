@@ -6,6 +6,9 @@ import { useAuth } from "./useAuth";
 
 const initialState = {
   newMessages: [],
+  forConsumer: null,
+  hasActiveConsumer: false,
+  setActiveConsumer: (boolean) => null
 };
 
 const WebSocketContext = createContext(initialState);
@@ -17,10 +20,23 @@ function webSocketReducer(state, action) {
       newMessages: [...action.payload]
     }
   }
-  if(action.type == "NEW_MESSAGE") {
+  if(action.type == "NEW_MESSAGE_HANDLED") {
+    if(state.hasActiveConsumer) {
+      return {
+        ...state, 
+        forConsumer: {...action.payload}
+      }
+    }
     return {
       ...state,
       newMessages: [...state.newMessages, {...action.payload}]
+    }
+  }
+  if(action.type == "SET_ACTIVE_CONSUMER") {
+    console.log("payload is", action.payload);
+    return {
+      ...state,
+      hasActiveConsumer: action.payload
     }
   }
   return state;
@@ -30,15 +46,14 @@ export const WebSocketProvider = ({children}) => {
   const {user, token} = useAuth();
   const [state, dispatch] = useReducer(webSocketReducer, initialState);
 
+  function handleNewMessage(message) {
+    dispatch({type: "NEW_MESSAGE_HANDLED", payload: message});
+  }
   function setNewMessages(messages) {
     dispatch({type: "SET_NEW_MESSAGES", payload: messages ? messages : []});
-  } 
-  function handleNewMessage(message) {
-    if(message) dispatch({type: "NEW_MESSAGE", payload: message});
   }
-
-  async function fetchNewMessages() {
-    
+  function setActiveConsumer(hasConsumer) {
+    dispatch({type: "SET_ACTIVE_CONSUMER", payload: hasConsumer});
   }
 
   useEffect(() => {
@@ -54,6 +69,11 @@ export const WebSocketProvider = ({children}) => {
   return (
     <WebSocketContext.Provider value={{
       newMessages: state.newMessages,
+      forConsumer: state.forConsumer,
+      hasActiveConsumer: state.hasActiveConsumer,
+      setActiveConsumer,
+      // consumerSubject: state.consumerSubject,
+      // setConsumerSubject,
     }}>
       {children}
     </WebSocketContext.Provider>

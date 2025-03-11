@@ -29,9 +29,10 @@ class WebSocketService {
 
   subscribe = (destination, callBack) => {
     if(this.client && this.client.connected){
-      this.client.subscribe(destination, (message) => {
+      const subscription = this.client.subscribe(destination, (message) => {
         callBack(JSON.parse(message.body));
-      })
+      });
+      this.subscriptions.set(destination, subscription);
     } else {
       console.log("Try to subscribe in a deconnected websocket");
     }
